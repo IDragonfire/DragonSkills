@@ -15,6 +15,7 @@ import api.SkillResult;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.utils.DUtils;
+import com.github.idragonfire.dragonskills.utils.DUtils.Direction;
 
 public class DiaFinder extends ActiveSkill {
     private static final int FRONT = 0;
@@ -78,7 +79,7 @@ public class DiaFinder extends ActiveSkill {
     public SkillResult use(Player player) {
         try {
             Block wTargetBlock = player.getLocation().getBlock();
-            BlockFace direction = DUtils.getPlayerDirection(player);
+            Direction direction = DUtils.getCardinalDirection(player);
             BlockFace[] vector = transformBlockFace(direction);
 
             boolean areaProtected = false;
@@ -121,8 +122,8 @@ public class DiaFinder extends ActiveSkill {
                     if (startBlocks.get(j).getType() == Material.DIAMOND_ORE) {
                         diamonds++;
                     }
-                    player.sendBlockChange(startBlocks.get(j).getLocation(),
-                            Material.GLASS, (byte) 0);
+                    // player.sendBlockChange(startBlocks.get(j).getLocation(),
+                    // Material.GLASS, (byte) 0);
                 }
             }
             if (areaProtected) {
@@ -183,32 +184,33 @@ public class DiaFinder extends ActiveSkill {
     // return !allowed;
     // }
 
-    private static BlockFace[] transformBlockFace(BlockFace direction) {
+    private static BlockFace[] transformBlockFace(DUtils.Direction direction) {
         BlockFace[] vectors = new BlockFace[4];
         switch (direction) {
         case NORTH:
-            vectors[FRONT] = BlockFace.EAST;
-            vectors[RIGHT] = BlockFace.SOUTH;
-            vectors[BACK] = BlockFace.WEST;
-            vectors[LEFT] = BlockFace.NORTH;
-            return vectors;
-        case EAST:
-            vectors[FRONT] = BlockFace.SOUTH;
-            vectors[RIGHT] = BlockFace.WEST;
-            vectors[BACK] = BlockFace.NORTH;
-            vectors[LEFT] = BlockFace.EAST;
-            return vectors;
-        case SOUTH:
             vectors[FRONT] = BlockFace.WEST;
             vectors[RIGHT] = BlockFace.NORTH;
             vectors[BACK] = BlockFace.EAST;
             vectors[LEFT] = BlockFace.SOUTH;
             return vectors;
-        case WEST:
+        case EAST:
             vectors[FRONT] = BlockFace.NORTH;
             vectors[RIGHT] = BlockFace.EAST;
             vectors[BACK] = BlockFace.SOUTH;
             vectors[LEFT] = BlockFace.WEST;
+            return vectors;
+        case SOUTH:
+            vectors[FRONT] = BlockFace.EAST;
+            vectors[RIGHT] = BlockFace.SOUTH;
+            vectors[BACK] = BlockFace.WEST;
+            vectors[LEFT] = BlockFace.NORTH;
+            return vectors;
+        case WEST:
+            vectors[FRONT] = BlockFace.SOUTH;
+            vectors[RIGHT] = BlockFace.WEST;
+            vectors[BACK] = BlockFace.NORTH;
+            vectors[LEFT] = BlockFace.EAST;
+
             return vectors;
         default:
             return null;

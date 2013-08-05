@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -124,46 +123,5 @@ public class DUtils {
 
     private Block getRelative(Block block, int[] pos) {
         return block.getRelative(pos[0], pos[1], pos[2]);
-    }
-
-    public static BlockFace getPlayerDirection(Player player) {
-        Block wTargetBlock = player.getTargetBlock(null, 120);
-
-        double wTargetX = wTargetBlock.getX();
-        double wTargetZ = wTargetBlock.getZ();
-
-        double wCenterX = player.getLocation().getX();
-        double wCenterZ = player.getLocation().getZ();
-
-        double wAngle = Math
-                .atan((wTargetX - wCenterX) / (wCenterZ - wTargetZ)) * 57.295779513082323D;
-
-        if ((wTargetX > wCenterX) && (wTargetZ > wCenterZ)) {
-            wAngle = 90.0D + wAngle + 90.0D;
-        } else if ((wTargetX < wCenterX) && (wTargetZ > wCenterZ)) {
-            wAngle += 180.0D;
-        } else if ((wTargetX < wCenterX) && (wTargetZ < wCenterZ)) {
-            wAngle = 90.0D + wAngle + 270.0D;
-        }
-
-        BlockFace wDirection = null;
-        if (wAngle < 45.0D) {
-            // datamodel EAST, ingame NORTH
-            wDirection = BlockFace.NORTH;
-        } else if (wAngle < 135.0D) {
-            // datamodel SOUTH, ingame EAST
-            wDirection = BlockFace.EAST;
-        } else if (wAngle < 225.0D) {
-            // datamodel WEST, ingame SOUTH
-            wDirection = BlockFace.SOUTH;
-        } else if (wAngle < 315.0D) {
-            // datamodel NORTH, ingame WEST
-            wDirection = BlockFace.WEST;
-        } else if (wAngle < 360.0D) {
-            // datamodel EAST, ingame NORTH
-            wDirection = BlockFace.NORTH;
-        }
-
-        return wDirection;
     }
 }
