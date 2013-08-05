@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.entity.Player;
-
 import api.ActiveSkill;
 import api.DSystem;
 import api.Skill;
@@ -34,19 +32,24 @@ public class Skills {
         return new ArrayList<Skill>(skillList.values());
     }
 
-    public boolean hasSkill(String skillName) {
+    public boolean hasSkillUnchecked(String skillName) {
         return skillList.containsKey(skillName.toLowerCase());
     }
 
-    public Skill getSkill(String skillName) {
-        return skillList.get(skillName.toLowerCase());
+    private boolean hasSkill(String skillName) {
+        return skillList.containsKey(skillName);
+    }
+
+    private Skill getSkill(String skillName) {
+        return skillList.get(skillName);
     }
 
     public void addSkill(Skill skill) {
         skillList.put(skill.getSkillName().toLowerCase(), skill);
     }
 
-    public void useSkill(String skillName, Player player) {
+    public void useSkill(String skillName, DPlayer player) {
+        skillName = skillName.toLowerCase();
         if (!hasSkill(skillName)) {
             DSystem.log("found no skill: " + skillName);
             return;
@@ -56,6 +59,7 @@ public class Skills {
             return;
         }
         ActiveSkill skill = (ActiveSkill) getSkill(skillName);
-        skill.use(player);
+        skill.use(player.getBukkitPlayer());
+        player.addCooldown(skillName, 10 * 60);
     }
 }

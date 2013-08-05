@@ -47,13 +47,13 @@ public class DragonSkillsPlugin extends JavaPlugin {
                 sender.sendMessage("Skill name missing");
                 return true;
             }
-            skills.useSkill(args[0], player);
+            skills.useSkill(args[0], players.getDPlayer(player));
         } else if (cmd.equals("bind")) {
             if (args.length != 1) {
                 sender.sendMessage("Skill name missing");
                 return true;
             }
-            if (!skills.hasSkill(args[0])) {
+            if (!skills.hasSkillUnchecked(args[0])) {
                 sender.sendMessage("Skill not available");
                 return true;
             }
