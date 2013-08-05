@@ -26,7 +26,7 @@ public class Skills {
         skills.add(new LeaveWall(plugin));
 
         for (Skill skill : skills) {
-            skillList.put(skill.getSkillName(), skill);
+            addSkill(skill);
         }
     }
 
@@ -34,16 +34,28 @@ public class Skills {
         return new ArrayList<Skill>(skillList.values());
     }
 
-    public void executeSkill(String skillName, Player player) {
-        if (!skillList.containsKey(skillName)) {
+    public boolean hasSkill(String skillName) {
+        return skillList.containsKey(skillName.toLowerCase());
+    }
+
+    public Skill getSkill(String skillName) {
+        return skillList.get(skillName.toLowerCase());
+    }
+
+    public void addSkill(Skill skill) {
+        skillList.put(skill.getSkillName().toLowerCase(), skill);
+    }
+
+    public void useSkill(String skillName, Player player) {
+        if (!hasSkill(skillName)) {
             DSystem.log("found no skill: " + skillName);
             return;
         }
-        if (!(skillList.get(skillName) instanceof ActiveSkill)) {
+        if (!(getSkill(skillName) instanceof ActiveSkill)) {
             DSystem.log("no active skill");
             return;
         }
-        ActiveSkill skill = (ActiveSkill) skillList.get(skillName);
+        ActiveSkill skill = (ActiveSkill) getSkill(skillName);
         skill.use(player);
     }
 }

@@ -25,10 +25,10 @@ public class PlayerStorage implements Listener {
     }
 
     private DPlayer initDPlayerObject(Player bukkitPlayer) {
-        DPlayer player = new DPlayer(bukkitPlayer.getName(), bukkitPlayer);
-        player.bindList.put(Material.STICK, LeaveWall.class.getName());
-        player.bindList.put(Material.DIAMOND, DiaFinder.class.getName());
-        player.bindList.put(Material.WOOD_SPADE, Hole.class.getName());
+        DPlayer player = new DPlayer(bukkitPlayer);
+        player.bindList.put(Material.STICK, LeaveWall.class.getSimpleName());
+        player.bindList.put(Material.DIAMOND, DiaFinder.class.getSimpleName());
+        player.bindList.put(Material.WOOD_SPADE, Hole.class.getSimpleName());
         playerStorage.put(bukkitPlayer.getName(), player);
         return player;
     }
