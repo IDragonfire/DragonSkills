@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import api.ActiveSkill;
 import api.SkillResult;
 
+import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.utils.DUtils;
 import com.github.idragonfire.dragonskills.utils.DUtils.Direction;
 
@@ -16,7 +17,8 @@ public class LeaveWall extends ActiveSkill {
     // private WorldGuardPlugin worldGuard;
     // private boolean useWorldGuard;
 
-    public LeaveWall(/* Heroes plugin */) {
+    public LeaveWall(DragonSkillsPlugin plugin/* Heroes plugin */) {
+        super(plugin);
         /*
          * super(plugin, "LeaveWall"); setDescription("spawn a wand of Leaves in front of you"); setUsage("/skill leavewall"); setIdentifiers(new String[] { "skill leavewall" }); setTypes(new
          * SkillType[] { SkillType.EARTH }); for (int i = 0; i < ALLOWED_MATERIALS.length; i++) { allowedMaterials.add(ALLOWED_MATERIALS[i]); } try { Plugin towny =

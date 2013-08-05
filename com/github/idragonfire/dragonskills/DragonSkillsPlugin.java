@@ -10,13 +10,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import api.ActiveSkill;
 
-import com.github.idragonfire.dragonskills.skills.LeaveWall;
+import com.github.idragonfire.dragonskills.skills.DiaFinder;
 
 public class DragonSkillsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        final ActiveSkill skill = new LeaveWall();
+        final ActiveSkill skill = new DiaFinder(this);
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.LOWEST)
             public void onPlayerInteract(PlayerInteractEvent event) {
