@@ -19,7 +19,7 @@ public class DragonSkillsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        players = new PlayerStorage();
+        players = new PlayerStorage(this);
         skills = new Skills(this);
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.LOWEST)
