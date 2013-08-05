@@ -6,16 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import api.DSystem;
-
-import com.github.idragonfire.dragonskills.skills.DiaFinder;
-import com.github.idragonfire.dragonskills.skills.Hole;
-import com.github.idragonfire.dragonskills.skills.LeaveWall;
 
 public class PlayerStorage implements Listener {
     public HashMap<String, DPlayer> playerStorage;
@@ -39,38 +35,53 @@ public class PlayerStorage implements Listener {
     }
 
     private DPlayer initDPlayerObject(Player bukkitPlayer) {
-        DPlayer player = new DPlayer(bukkitPlayer);
-        player.bindList.put(Material.STICK, LeaveWall.class.getSimpleName());
-        player.bindList.put(Material.DIAMOND, DiaFinder.class.getSimpleName());
-        player.bindList.put(Material.WOOD_SPADE, Hole.class.getSimpleName());
+        DPlayer player = null;
+        try {
+            player = DPlayer.load(getPlayerFile(bukkitPlayer), bukkitPlayer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            player = new DPlayer(this, bukkitPlayer);
+        }
         playerStorage.put(bukkitPlayer.getName(), player);
         return player;
     }
 
-    private void unloadPlayer(DPlayer player) {
-        savePlayer(player);
-        playerStorage.remove(player);
+    public void unloadPlayer(Player player) {
+        unloadPlayer(getDPlayer(player));
     }
 
-    public void savePlayer(DPlayer player) {
-        try {
+    private void unloadPlayer(DPlayer player) {
+        player.save();
+        playerStorage.remove(player.getBukkitPlayer().getName());
+    }
 
-            File playerFile = new File(playerFolder.getAbsolutePath()
-                    + File.separator
-                    + player.getBukkitPlayer().getName().toLowerCase() + ".yml");
-            player.save(playerFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public File getPlayerFile(Player player) {
+        return new File(playerFolder.getAbsolutePath() + File.separator
+                + player.getName().toLowerCase() + ".yml");
+    }
+
+    /**
+     * remove DPlayer from cache
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        unloadPlayer(event.getPlayer());
+    }
+
+    /**
+     * load DPlayer into cache
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        getDPlayer(event.getPlayer());
     }
 
     private class DPlayerSaveThread implements Runnable {
         public void run() {
-            DSystem.log("save players");
             List<DPlayer> players = new ArrayList<DPlayer>(playerStorage
                     .values());
             for (DPlayer player : players) {
-                savePlayer(player);
+                player.save();
             }
         }
     }

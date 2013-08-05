@@ -17,10 +17,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class DPlayer {
     public HashMap<Material, String> bindList;
     private Player bukkitPlayer;
+    private File file;
 
-    public DPlayer(Player bukkitPlayer) {
+    public DPlayer(PlayerStorage storage, Player bukkitPlayer) {
+        this(storage.getPlayerFile(bukkitPlayer), bukkitPlayer);
+    }
+
+    public DPlayer(File storageFile, Player bukkitPlayer) {
         this.bukkitPlayer = bukkitPlayer;
         bindList = new HashMap<Material, String>();
+        file = storageFile;
     }
 
     public boolean hasBind(Material material) {
@@ -29,6 +35,7 @@ public class DPlayer {
 
     public void addBind(Material material, String skillName) {
         bindList.put(material, skillName);
+        save();
     }
 
     public void onPlayerInteractEvent(Skills skills, Material mat,
@@ -44,7 +51,7 @@ public class DPlayer {
         return bukkitPlayer;
     }
 
-    public void save(File file) throws IOException {
+    public void save() {
         FileConfiguration player = new YamlConfiguration();
         player.set("bind", bindList);
 
@@ -53,20 +60,18 @@ public class DPlayer {
             section.set(material.toString(), bindList.get(material));
         }
 
-        player.save(file);
         try {
-            load(file, bukkitPlayer);
-        } catch (InvalidConfigurationException e) {
+            player.save(file);
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 
     public static DPlayer load(File file, Player bukkitPlayer)
             throws FileNotFoundException, IOException,
             InvalidConfigurationException {
-        DPlayer player = new DPlayer(bukkitPlayer);
+        DPlayer player = new DPlayer(file, bukkitPlayer);
         FileConfiguration playerData = new YamlConfiguration();
         playerData.load(file);
         ConfigurationSection section = playerData
