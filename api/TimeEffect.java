@@ -14,6 +14,21 @@ public abstract class TimeEffect implements Runnable {
         this.plugin = plugin;
     }
 
+    public void startEffect(long delay) {
+        if (delay <= 0) {
+            startEffect();
+        } else {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
+                    new Runnable() {
+
+                        @Override
+                        public void run() {
+                            startEffect();
+                        }
+                    }, delay);
+        }
+    }
+
     public void startEffect() {
         initTimeEffect();
         plugin.addTimeEffect(this);

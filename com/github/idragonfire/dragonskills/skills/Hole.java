@@ -5,20 +5,34 @@ import java.util.HashSet;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
-import api.ActiveSkill;
 import api.DSystem;
 import api.SkillResult;
+import api.TargetBlockSkill;
 import api.TimeEffect;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
+import com.github.idragonfire.dragonskills.utils.DUtils;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
-public class Hole extends ActiveSkill {
-    private final HashSet<Material> ALLOWED = new HashSet<Material>();
+public class Hole extends TargetBlockSkill {
+
+    private final int[] LEFT = new int[] { -1, 0, 0 };
+    private final int[] RIGHT = new int[] { 1, 0, 0 };
+    private final int[] BACK = new int[] { 0, 0, 1 };
+    private final int[] FRONT = new int[] { 0, 0, -1 };
+    private final int[][] MOVMENT = new int[][] { { 0, 0, 0 }, RIGHT, BACK,
+            LEFT, LEFT, LEFT, FRONT, RIGHT, FRONT, RIGHT, FRONT, RIGHT, BACK,
+            RIGHT, BACK, RIGHT, BACK, LEFT, BACK, LEFT, BACK, LEFT, FRONT, LEFT };
+    private final int[][] STAIRS = new int[][] { { 3, -1, 2 }, { 0, 1, 1 },
+            { -1, 1, 0 }, { 0, 1, 1 }, { -1, 1, 0 }, { -1, 1, 0 }, { -1, 1, 0 } };
+    private final int[][] RING = new int[][] { FRONT, { -1, 0, -1 },
+            { -1, 0, -1 }, FRONT, { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 },
+            RIGHT, { 1, 0, 1 }, { 1, 0, 1 }, { 1, 0, 1 }, BACK, BACK, BACK,
+            { -1, 0, 1 }, { -1, 0, 1 }, LEFT, LEFT };
+
     private final Material[] ALLOWED_MATERIALS = new Material[] { Material.AIR,
             Material.WOOD, /* Material.BEDROCK, */Material.LEAVES,
             Material.BROWN_MUSHROOM, Material.CLAY, Material.COAL_ORE,
@@ -34,25 +48,12 @@ public class Hole extends ActiveSkill {
             Material.STATIONARY_LAVA, Material.LONG_GRASS, Material.VINE,
             Material.SANDSTONE, Material.PUMPKIN, Material.LAVA,
             Material.DEAD_BUSH };
-    private final int HOLE_TIME = 10 * 1000;
-    private final int DELAY_TO_SPAWN = 3 * 1000;
-    private final int[] LEFT = new int[] { -1, 0, 0 };
-    private final int[] RIGHT = new int[] { 1, 0, 0 };
-    private final int[] BACK = new int[] { 0, 0, 1 };
-    private final int[] FRONT = new int[] { 0, 0, -1 };
-    private final int[][] MOVMENT = new int[][] { { 0, 0, 0 }, RIGHT, BACK,
-            LEFT, LEFT, LEFT, FRONT, RIGHT, FRONT, RIGHT, FRONT, RIGHT, BACK,
-            RIGHT, BACK, RIGHT, BACK, LEFT, BACK, LEFT, BACK, LEFT, FRONT, LEFT };
-    private final int[][] STAIRS = new int[][] { { 3, -1, 2 }, { 0, 1, 1 },
-            { -1, 1, 0 }, { 0, 1, 1 }, { -1, 1, 0 }, { -1, 1, 0 }, { -1, 1, 0 } };
-    private final int[][] RING = new int[][] { FRONT, { -1, 0, -1 },
-            { -1, 0, -1 }, FRONT, { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 },
-            RIGHT, { 1, 0, 1 }, { 1, 0, 1 }, { 1, 0, 1 }, BACK, BACK, BACK,
-            { -1, 0, 1 }, { -1, 0, 1 }, LEFT, LEFT };
     @SkillConfig
-    private int holeTime = HOLE_TIME;
+    private final HashSet<Material> allowedMaterial = new HashSet<Material>();
     @SkillConfig
-    private int delay_to_spawn = DELAY_TO_SPAWN;
+    private int holeTime = 10;
+    @SkillConfig
+    private int delay_to_spawn = 3;
 
     public Hole(DragonSkillsPlugin plugin) {
         super(plugin);
@@ -62,7 +63,7 @@ public class Hole extends ActiveSkill {
         // setIdentifiers(new String[] { "skill hole", "skill Hole" });
         // setTypes(new SkillType[] { SkillType.EARTH, SkillType.COUNTER });
         for (int i = 0; i < ALLOWED_MATERIALS.length; i++) {
-            ALLOWED.add(ALLOWED_MATERIALS[i]);
+            allowedMaterial.add(ALLOWED_MATERIALS[i]);
         }
         // Bukkit.getServer().getPluginManager().registerEvents(
         // new HoleRestore(plugin), plugin);
@@ -102,21 +103,13 @@ public class Hole extends ActiveSkill {
     // }
 
     @Override
-    public SkillResult use(Player player) {
-        Block startBlock = player.getLocation().getBlock().getRelative(
-                BlockFace.DOWN);
+    public SkillResult use(Player player, Block startBlock) {
         if (!canPlaceHole(player, startBlock)) {
             DSystem.log("Cannot place mine here");
             return SkillResult.FAIL;
         }
-        // final int holeTime = SkillConfigManager.getUseSetting(hero, this,
-        // HOLE_TIME_NODE, HOLE_TIME, false);
-        // final int delayToSpawn = SkillConfigManager.getUseSetting(hero, this,
-        // DELAY_TO_SPAWN_NODE, DELAY_TO_SPAWN, false);
-
-        final HoleEffect holeEffect = new HoleEffect(getPlugin(),
-                holeTime * 20, player, startBlock);
-        holeEffect.startEffect();
+        new HoleEffect(getPlugin(), holeTime * DUtils.TICKS, player, startBlock)
+                .startEffect(delay_to_spawn * DUtils.TICKS);
         DSystem.log("The Mine call to you in $1 seconds");
         return SkillResult.SUCESSFULL;
     }
@@ -171,7 +164,7 @@ public class Hole extends ActiveSkill {
     }
 
     public boolean invalidBlock(Player player, Block block) {
-        boolean allowed = ALLOWED.contains(block.getType());
+        boolean allowed = allowedMaterial.contains(block.getType());
         if (!allowed) {
             DSystem.log(player.getDisplayName() + " try to use Skill Hole on "
                     + block.getType());

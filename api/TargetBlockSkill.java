@@ -1,5 +1,6 @@
 package api;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -25,7 +26,12 @@ public abstract class TargetBlockSkill extends ActiveSkill {
 
     @Override
     public SkillResult use(Player player) {
-        return use(player, player.getTargetBlock(null, targetBlockMaxDistance));
+        Block b = player.getTargetBlock(null, targetBlockMaxDistance);
+        if (b.getType() == Material.AIR) {
+            DSystem.log("to far away");
+            return SkillResult.FAIL;
+        }
+        return use(player, b);
     }
 
     public abstract SkillResult use(Player player, Block targetBlock);

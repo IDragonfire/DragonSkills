@@ -17,6 +17,7 @@ public class DUtils {
     // public static final int[] RIGHT = new int[] { 1, 0, 0 };
     // public static final int[] BACK = new int[] { 0, 0, 1 };
     // public static final int[] FRONT = new int[] { 0, 0, -1 };
+    public static final int TICKS = 20;
 
     private static Random rand = new Random();
 
