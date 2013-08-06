@@ -1,7 +1,10 @@
 package com.github.idragonfire.dragonskills;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -12,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.github.idragonfire.dragonskills.api.DSystem;
 import com.github.idragonfire.dragonskills.api.Skill;
 import com.github.idragonfire.dragonskills.api.TimeEffect;
-
 
 public class DragonSkillsPlugin extends JavaPlugin {
     private Skills skills;
@@ -48,12 +50,15 @@ public class DragonSkillsPlugin extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command command,
             String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        String cmd = command.getName();
+        Set<String> consoleSupport = new HashSet<String>(Arrays
+                .asList(new String[] { "skills" }));
+        if (!(sender instanceof Player) && !consoleSupport.contains(cmd)) {
             sender.sendMessage("This command can only be run by a player.");
             return true;
         }
         Player player = (Player) sender;
-        String cmd = command.getName();
+
         if (cmd.equals("skill")) {
             if (args.length != 1) {
                 sender.sendMessage("Skill name missing");
@@ -77,7 +82,7 @@ public class DragonSkillsPlugin extends JavaPlugin {
             players.getDPlayer(player).removeBind(
                     player.getItemInHand().getType());
             sender.sendMessage("remove bind");
-        } else if (cmd.equals("skill_list")) {
+        } else if (cmd.equals("skills")) {
             for (Skill skill : skills.getSkills()) {
                 DSystem.log(skill.getSkillName());
             }

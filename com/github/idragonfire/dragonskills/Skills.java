@@ -117,7 +117,7 @@ public class Skills {
                 if (fieldMap.containsKey(key)) {
                     tmpField = fieldMap.get(key);
                     tmpField.setAccessible(true);
-                    if (tmpField.get(skill) instanceof Set) {
+                    if (tmpField.get(skill) instanceof Set<?>) {
                         List<String> tmpList = skillConfig.getStringList(key);
                         HashSet<Material> materials = new HashSet<Material>();
                         for (String materialString : tmpList) {

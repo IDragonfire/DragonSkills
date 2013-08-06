@@ -16,4 +16,6 @@ public abstract class Skill {
     public DragonSkillsPlugin getPlugin() {
         return plugin;
     }
+
+    public abstract String getDescription();
 }

@@ -1,6 +1,7 @@
 package com.github.idragonfire.dragonskills.skills;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import org.bukkit.Material;
@@ -8,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.api.DSystem;
@@ -18,60 +18,29 @@ import com.github.idragonfire.dragonskills.utils.DUtils;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
 public class DiaFinder extends TargetBlockSkill {
-    private final Material[] ALLOWED_MATERIALS = new Material[] {
-            Material.STONE, Material.DIAMOND_ORE, Material.GOLD_ORE,
-            Material.IRON_ORE, Material.COAL_ORE, Material.REDSTONE_ORE,
-            Material.LAPIS_ORE, Material.GRAVEL, Material.DIRT, Material.WOOD,
-            Material.FENCE, Material.MOSSY_COBBLESTONE };
-
     @SkillConfig
     private int checkDistance = 100;
     @SkillConfig
-    private HashSet<Material> allowedMaterialsForTunnelDestruction;
+    private HashSet<Material> allowedMaterialsForTunnelDestruction = new HashSet<Material>(
+            Arrays
+                    .asList(new Material[] { Material.STONE,
+                            Material.DIAMOND_ORE, Material.GOLD_ORE,
+                            Material.IRON_ORE, Material.COAL_ORE,
+                            Material.REDSTONE_ORE, Material.LAPIS_ORE,
+                            Material.GRAVEL, Material.DIRT, Material.WOOD,
+                            Material.FENCE, Material.MOSSY_COBBLESTONE }));
 
     public DiaFinder(DragonSkillsPlugin plugin) {
         super(plugin);
-        // super(plugin, "DiaFinder");
-        // setDescription("Detect Diamond Ore up to $1 blocks in front of you.");
-        // setUsage("/skill diafinder");
-        // setIdentifiers(new String[] { "skill diafinder" });
-        // setTypes(new SkillType[] { SkillType.ITEM });
-        allowedMaterialsForTunnelDestruction = new HashSet<Material>();
-        for (int i = 0; i < ALLOWED_MATERIALS.length; i++) {
-            allowedMaterialsForTunnelDestruction.add(ALLOWED_MATERIALS[i]);
-        }
     }
 
-    // @Override
-    // public String getDescription(Hero hero) {
-    // int maxDistance = SkillConfigManager.getUseSetting(hero, this,
-    // Setting.AMOUNT.node(), MAX_DISTANCE, false);
-    // StringBuffer sb = new StringBuffer(super.getDescription().replace("$1",
-    // "" + maxDistance));
-    // double cdSec = SkillConfigManager.getUseSetting(hero, this,
-    // Setting.COOLDOWN, 45000, false) / 1000.0D;
-    // if (cdSec > 0.0D) {
-    // sb.append(" CD:");
-    // sb.append(Util.formatDouble(cdSec));
-    // sb.append("s");
-    // }
-    // int mana = SkillConfigManager.getUseSetting(hero, this, Setting.MANA,
-    // 30, false);
-    // if (mana > 0) {
-    // sb.append(" M:");
-    // sb.append(mana);
-    // }
-    // return sb.toString();
-    // }
-
-    // @Override
-    // public ConfigurationSection getDefaultConfig() {
-    // ConfigurationSection node = super.getDefaultConfig();
-    // node.set(Setting.COOLDOWN.node(), Double.valueOf(0.2D));
-    // node.set(Setting.MANA.node(), Integer.valueOf(0));
-    // node.set(Setting.RADIUS.node(), Integer.valueOf(MAX_DISTANCE));
-    // return node;
-    // }
+    @Override
+    public String getDescription() {
+        return DSystem
+                .paramString(
+                        "Detect Diamond Ore up to $1 blocks in front of you, try to destroy some blocks in front of you and place a torch",
+                        checkDistance);
+    }
 
     @Override
     public SkillResult use(final Player player, final Block targetBlock) {

@@ -5,7 +5,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.api.DSystem;
 import com.github.idragonfire.dragonskills.api.SkillResult;
@@ -108,5 +107,11 @@ public class LeaveWall extends TargetBlockSkill {
             DUtils.transformBlock(player, block, Material.GRASS.getId(),
                     leaveValue);
         }
+    }
+
+    @Override
+    public String getDescription() {
+        return DSystem.paramString("Spawn a $1x$2x$s wall of Leaves",
+                wall_height, wall_width, wall_thickness);
     }
 }

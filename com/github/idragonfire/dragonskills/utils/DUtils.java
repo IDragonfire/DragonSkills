@@ -1,5 +1,6 @@
 package com.github.idragonfire.dragonskills.utils;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -113,43 +114,25 @@ public class DUtils {
         return Direction.INVALID;
     }
 
-    private static HashSet<Material> allowedGrassMaterials = new HashSet<Material>();
-    static {
-        allowedGrassMaterials.add(Material.AIR);
-        allowedGrassMaterials.add(Material.GRASS);
-        allowedGrassMaterials.add(Material.RED_ROSE);
-        allowedGrassMaterials.add(Material.YELLOW_FLOWER);
-        allowedGrassMaterials.add(Material.SNOW);
-        allowedGrassMaterials.add(Material.LONG_GRASS);
-        allowedGrassMaterials.add(Material.VINE);
-        allowedGrassMaterials.add(Material.LEAVES);
-    }
+    private static HashSet<Material> allowedGrassMaterials = new HashSet<Material>(
+            Arrays.asList(new Material[] { Material.AIR, Material.GRASS,
+                    Material.RED_ROSE, Material.YELLOW_FLOWER, Material.SNOW,
+                    Material.LONG_GRASS, Material.VINE, Material.LEAVES }));
 
     public static boolean isAllowedGrassMaterial(Material toCheck) {
         return allowedGrassMaterials.contains(toCheck);
     }
 
-    private static HashSet<Material> forbiddenMaterials = new HashSet<Material>();
-    static {
-        forbiddenMaterials.add(Material.CHEST);
-        forbiddenMaterials.add(Material.ENDER_CHEST);
-        forbiddenMaterials.add(Material.TRAPPED_CHEST);
-        forbiddenMaterials.add(Material.DISPENSER);
-        forbiddenMaterials.add(Material.DROPPER);
-        forbiddenMaterials.add(Material.FURNACE);
-        forbiddenMaterials.add(Material.PISTON_BASE);
-        forbiddenMaterials.add(Material.PISTON_STICKY_BASE);
-        forbiddenMaterials.add(Material.DIODE);
-        forbiddenMaterials.add(Material.DAYLIGHT_DETECTOR);
-        forbiddenMaterials.add(Material.REDSTONE_COMPARATOR);
-        forbiddenMaterials.add(Material.RAILS);
-        forbiddenMaterials.add(Material.DETECTOR_RAIL);
-        forbiddenMaterials.add(Material.POWERED_RAIL);
-        forbiddenMaterials.add(Material.BREWING_STAND);
-        forbiddenMaterials.add(Material.JUKEBOX);
-        forbiddenMaterials.add(Material.MOB_SPAWNER);
-        forbiddenMaterials.add(Material.SIGN);
-    }
+    private static HashSet<Material> forbiddenMaterials = new HashSet<Material>(
+            Arrays.asList(new Material[] { Material.CHEST,
+                    Material.ENDER_CHEST, Material.TRAPPED_CHEST,
+                    Material.DISPENSER, Material.DROPPER, Material.FURNACE,
+                    Material.PISTON_BASE, Material.PISTON_STICKY_BASE,
+                    Material.DIODE, Material.DAYLIGHT_DETECTOR,
+                    Material.REDSTONE_COMPARATOR, Material.RAILS,
+                    Material.DETECTOR_RAIL, Material.POWERED_RAIL,
+                    Material.BREWING_STAND, Material.JUKEBOX,
+                    Material.MOB_SPAWNER, Material.SIGN }));
 
     public static boolean isForbiddenToTransform(Player player, Block block) {
         if (forbiddenMaterials.contains(block.getType())) {

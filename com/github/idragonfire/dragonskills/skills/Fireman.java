@@ -5,7 +5,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.api.SkillResult;
 import com.github.idragonfire.dragonskills.api.TargetBlockSkill;
@@ -48,6 +47,11 @@ public class Fireman extends TargetBlockSkill {
             }
         }
         // player.sendBlockChange(b.getLocation(), Material.GLASS, (byte) 0);
+    }
+
+    @Override
+    public String getDescription() {
+        return "kill the fire in a radius";
     }
 
 }

@@ -8,10 +8,10 @@ public class DSystem {
     public static ChatColor COLOR_TEXT = ChatColor.GRAY;
 
     public static void log(String msg, Object... args) {
-        Bukkit.getServer().broadcastMessage(paramMsg(msg, args));
+        Bukkit.getServer().broadcastMessage(paramString(msg, args));
     }
 
-    public static String paramMsg(String msg, Object... args) {
+    public static String paramString(String msg, Object... args) {
         msg = new StringBuilder().append(COLOR_TEXT).append(msg).toString();
         if (args != null) {
             for (int i = 0; i < args.length; i++) {
