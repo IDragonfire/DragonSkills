@@ -3,6 +3,7 @@ package com.github.idragonfire.dragonskills;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,10 +19,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class DPlayer {
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat(
-            "yyyyMMddHHmmss");
+    private static final SimpleDateFormat FORMAT_OUTPUT = new SimpleDateFormat(
+            "yyyy.MM.dd@HH:mm:ss");
     private HashMap<Material, String> bindList;
-    private HashMap<String, Long> cooldowns;
+    private HashMap<String, Date> cooldowns;
     private Player bukkitPlayer;
     private File file;
 
@@ -33,13 +34,18 @@ public class DPlayer {
         this.bukkitPlayer = bukkitPlayer;
         file = storageFile;
         bindList = new HashMap<Material, String>();
-        cooldowns = new HashMap<String, Long>();
+        cooldowns = new HashMap<String, Date>();
     }
 
     public void addCooldown(String skillName, int seconds) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.SECOND, seconds);
-        cooldowns.put(skillName, Long.valueOf(FORMAT.format(cal.getTime())));
+        addCooldown(skillName, cal.getTime());
+        save();
+    }
+
+    public void addCooldown(String skillName, Date time) {
+        cooldowns.put(skillName, time);
         save();
     }
 
@@ -73,18 +79,18 @@ public class DPlayer {
             section.set(material.toString(), bindList.get(material));
         }
         // save cooldowns
-        Long current_time = Long.valueOf(FORMAT.format(new Date()));
+        Date current_time = Calendar.getInstance().getTime();
         section = player.createSection("cooldown");
         for (String skillName : cooldowns.keySet()) {
-            if (cooldowns.get(skillName) > current_time) {
-                section.set(skillName, cooldowns.get(skillName));
+            if (cooldowns.get(skillName).compareTo(current_time) > 0) {
+                section.set(skillName, FORMAT_OUTPUT.format(cooldowns
+                        .get(skillName)));
             }
         }
 
         try {
             player.save(file);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -94,14 +100,29 @@ public class DPlayer {
             InvalidConfigurationException {
         DPlayer player = new DPlayer(file, bukkitPlayer);
         FileConfiguration playerData = new YamlConfiguration();
+
         playerData.load(file);
+
         ConfigurationSection section = playerData
                 .getConfigurationSection("bind");
-        Set<String> binds = section.getKeys(false);
-        if ((binds != null) && (binds.size() > 0)) {
-            for (String materialString : binds) {
+        Set<String> keys = section.getKeys(false);
+        if ((keys != null) && (keys.size() > 0)) {
+            for (String materialString : keys) {
                 player.addBind(Material.valueOf(materialString), section
                         .getString(materialString));
+            }
+        }
+
+        section = playerData.getConfigurationSection("cooldown");
+        keys = section.getKeys(false);
+        if ((keys != null) && (keys.size() > 0)) {
+            for (String skillName : keys) {
+                try {
+                    player.addCooldown(skillName, FORMAT_OUTPUT.parse(section
+                            .getString(skillName)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return player;

@@ -21,6 +21,7 @@ import api.DSystem;
 import api.SkillResult;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
+import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
 public class Hole extends ActiveSkill {
     private final HashSet<Material> ALLOWED = new HashSet<Material>();
@@ -41,8 +42,6 @@ public class Hole extends ActiveSkill {
             Material.DEAD_BUSH };
     private final int HOLE_TIME = 10 * 1000;
     private final int DELAY_TO_SPAWN = 3 * 1000;
-    private final String HOLE_TIME_NODE = "holetime";
-    private final String DELAY_TO_SPAWN_NODE = "delaytospawn";
     private final int[] LEFT = new int[] { -1, 0, 0 };
     private final int[] RIGHT = new int[] { 1, 0, 0 };
     private final int[] BACK = new int[] { 0, 0, 1 };
@@ -57,6 +56,10 @@ public class Hole extends ActiveSkill {
             RIGHT, { 1, 0, 1 }, { 1, 0, 1 }, { 1, 0, 1 }, BACK, BACK, BACK,
             { -1, 0, 1 }, { -1, 0, 1 }, LEFT, LEFT };
     private final Vector<HoleEffect> RESTORE = new Vector<HoleEffect>();
+    @SkillConfig
+    private int hole_time = HOLE_TIME;
+    @SkillConfig
+    private int delay_to_spawn = DELAY_TO_SPAWN;
 
     public Hole(DragonSkillsPlugin plugin) {
         super(plugin);

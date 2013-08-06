@@ -15,6 +15,7 @@ import api.SkillResult;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.utils.DUtils;
+import com.github.idragonfire.dragonskills.utils.SkillConfig;
 import com.github.idragonfire.dragonskills.utils.DUtils.Direction;
 
 public class DiaFinder extends ActiveSkill {
@@ -28,6 +29,10 @@ public class DiaFinder extends ActiveSkill {
             Material.IRON_ORE, Material.COAL_ORE, Material.REDSTONE_ORE,
             Material.LAPIS_ORE, Material.GRAVEL, Material.DIRT, Material.WOOD,
             Material.FENCE, Material.MOSSY_COBBLESTONE };
+
+    @SkillConfig
+    private int distance = MAX_DISTANCE;
+    @SkillConfig
     private HashSet<Material> allowedMaterials;
 
     public DiaFinder(DragonSkillsPlugin plugin) {
@@ -37,10 +42,10 @@ public class DiaFinder extends ActiveSkill {
         // setUsage("/skill diafinder");
         // setIdentifiers(new String[] { "skill diafinder" });
         // setTypes(new SkillType[] { SkillType.ITEM });
-        // this.allowedMaterials = new HashSet<Material>();
-        // for (int i = 0; i < DiaFinder.this.ALLOWED_MATERIALS.length; i++) {
-        // this.allowedMaterials.add(DiaFinder.this.ALLOWED_MATERIALS[i]);
-        // }
+        allowedMaterials = new HashSet<Material>();
+        for (int i = 0; i < ALLOWED_MATERIALS.length; i++) {
+            allowedMaterials.add(ALLOWED_MATERIALS[i]);
+        }
     }
 
     // @Override
