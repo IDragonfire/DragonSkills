@@ -1,5 +1,6 @@
 package com.github.idragonfire.dragonskills.skills;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -65,23 +66,23 @@ public class LeaveWall extends TargetBlockSkill {
         try {
             Block startLine = targetBlock;
             for (int z = 0; z < wall_thickness; z++) {
-                DUtils.transformBlock(player, startLine, leaveValue);
+                transformBlock(player, startLine, leaveValue);
                 Block leftBlockStart = startLine
                         .getRelative(faces[DUtils.LEFT]);
                 Block rightBlockStart = startLine
                         .getRelative(faces[DUtils.RIGHT]);
                 for (int x = 0; x < wall_width / 2 - 1; x++) {
-                    DUtils.transformBlock(player, leftBlockStart, leaveValue);
-                    DUtils.transformBlock(player, rightBlockStart, leaveValue);
+                    transformBlock(player, leftBlockStart, leaveValue);
+                    transformBlock(player, rightBlockStart, leaveValue);
                     Block leftBlockUp = leftBlockStart
                             .getRelative(BlockFace.UP);
                     Block rightBlockUp = rightBlockStart
                             .getRelative(BlockFace.UP);
                     Block startBlockUp = startLine.getRelative(BlockFace.UP);
                     for (int y = 0; y < wall_height - 1; y++) {
-                        DUtils.transformBlock(player, startBlockUp, leaveValue);
-                        DUtils.transformBlock(player, leftBlockUp, leaveValue);
-                        DUtils.transformBlock(player, rightBlockUp, leaveValue);
+                        transformBlock(player, startBlockUp, leaveValue);
+                        transformBlock(player, leftBlockUp, leaveValue);
+                        transformBlock(player, rightBlockUp, leaveValue);
                         startBlockUp = startBlockUp.getRelative(BlockFace.UP);
                         leftBlockUp = leftBlockUp.getRelative(BlockFace.UP);
                         rightBlockUp = rightBlockUp.getRelative(BlockFace.UP);
@@ -99,6 +100,14 @@ public class LeaveWall extends TargetBlockSkill {
         }
         // // Messaging.send(hero.getPlayer(), "Leave Wall has grown");
         return SkillResult.SUCESSFULL;
+    }
+
+    private void transformBlock(Player player, Block block, byte leaveValue)
+            throws Exception {
+        if (DUtils.isAllowedGrassMaterial(block.getType())) {
+            DUtils.transformBlock(player, block, Material.GRASS.getId(),
+                    leaveValue);
+        }
     }
 
     private Block getRelative(Block block, int[] pos) {

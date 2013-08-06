@@ -113,7 +113,6 @@ public class DUtils {
     }
 
     private static HashSet<Material> allowedGrassMaterials = new HashSet<Material>();
-
     static {
         allowedGrassMaterials.add(Material.AIR);
         allowedGrassMaterials.add(Material.GRASS);
@@ -129,8 +128,50 @@ public class DUtils {
         return allowedGrassMaterials.contains(toCheck);
     }
 
-    public static boolean transformBlock(Player player, Block block,
-            byte leaveValue) throws Exception {
+    private static HashSet<Material> forbiddenMaterials = new HashSet<Material>();
+    static {
+        forbiddenMaterials.add(Material.CHEST);
+        forbiddenMaterials.add(Material.ENDER_CHEST);
+        forbiddenMaterials.add(Material.TRAPPED_CHEST);
+        forbiddenMaterials.add(Material.DISPENSER);
+        forbiddenMaterials.add(Material.DROPPER);
+        forbiddenMaterials.add(Material.FURNACE);
+        forbiddenMaterials.add(Material.PISTON_BASE);
+        forbiddenMaterials.add(Material.PISTON_STICKY_BASE);
+        forbiddenMaterials.add(Material.DIODE);
+        forbiddenMaterials.add(Material.DAYLIGHT_DETECTOR);
+        forbiddenMaterials.add(Material.REDSTONE_COMPARATOR);
+        forbiddenMaterials.add(Material.RAILS);
+        forbiddenMaterials.add(Material.DETECTOR_RAIL);
+        forbiddenMaterials.add(Material.POWERED_RAIL);
+        forbiddenMaterials.add(Material.BREWING_STAND);
+        forbiddenMaterials.add(Material.JUKEBOX);
+        forbiddenMaterials.add(Material.MOB_SPAWNER);
+        forbiddenMaterials.add(Material.SIGN);
+    }
+
+    public static boolean isForbiddenToTransform(Player player, Block block) {
+        if (forbiddenMaterials.contains(block.getType())) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean transformBlock(Player player, Block block, int type)
+            throws Exception {
+        return transformBlock(player, block, type, (byte) 0);
+    }
+
+    public static boolean transformBlock(Player player, Block block, int type,
+            byte data) throws Exception {
+        return transformBlock(player, block, type, data, true);
+    }
+
+    public static boolean transformBlock(Player player, Block block, int type,
+            byte data, boolean applyPhysics) throws Exception {
+        if (forbiddenMaterials.contains(block.getType())) {
+            return false;
+        }
         // if (useTowny) {
         // boolean towny_allowed = PlayerCacheUtil.getCachePermission(hero
         // .getPlayer(), block.getLocation(), LEAVE_ID, (byte) 0,
@@ -158,14 +199,8 @@ public class DUtils {
         // throw new Exception("WorldGuard: no access");
         // }
         // }
-        if (DUtils.isAllowedGrassMaterial(block.getType())) {
-            // if (this.r.nextInt(10) != 0) {
-            // block.setTypeIdAndData(18, leaveValue, true);
-            // }
-            block.setTypeIdAndData(18, leaveValue, true);
-            return true;
-        }
-        return false;
+        block.setTypeIdAndData(Material.LEAVES.getId(), data, applyPhysics);
+        return true;
     }
 
     private Block getRelative(Block block, int[] pos) {
