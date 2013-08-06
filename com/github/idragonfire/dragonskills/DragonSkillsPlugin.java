@@ -72,6 +72,10 @@ public class DragonSkillsPlugin extends JavaPlugin {
                     player.getItemInHand().getType(), args[0]);
             sender.sendMessage(args[0] + " bind to "
                     + player.getItemInHand().getType());
+        } else if (cmd.equals("unbind")) {
+            players.getDPlayer(player).removeBind(
+                    player.getItemInHand().getType());
+            sender.sendMessage("remove bind");
         } else if (cmd.equals("skill_list")) {
             for (Skill skill : skills.getSkills()) {
                 DSystem.log(skill.getSkillName());

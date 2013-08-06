@@ -158,6 +158,11 @@ public class DUtils {
         return false;
     }
 
+    public static boolean transformBlock(Player player, Block block,
+            Material type) throws Exception {
+        return transformBlock(player, block, type.getId(), (byte) 0);
+    }
+
     public static boolean transformBlock(Player player, Block block, int type)
             throws Exception {
         return transformBlock(player, block, type, (byte) 0);
@@ -200,7 +205,7 @@ public class DUtils {
         // throw new Exception("WorldGuard: no access");
         // }
         // }
-        block.setTypeIdAndData(Material.LEAVES.getId(), data, applyPhysics);
+        block.setTypeIdAndData(type, data, applyPhysics);
         return true;
     }
 

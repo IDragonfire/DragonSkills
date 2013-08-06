@@ -58,6 +58,11 @@ public class DPlayer {
         save();
     }
 
+    public void removeBind(Material material) {
+        bindList.remove(material);
+        save();
+    }
+
     public void onPlayerInteractEvent(Skills skills, Material mat,
             PlayerInteractEvent event) {
         if (!hasBind(mat)) {

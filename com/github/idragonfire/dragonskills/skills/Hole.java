@@ -110,7 +110,7 @@ public class Hole extends TargetBlockSkill {
         }
         new HoleEffect(getPlugin(), holeTime * DUtils.TICKS, player, startBlock)
                 .startEffect(delay_to_spawn * DUtils.TICKS);
-        DSystem.log("The Mine call to you in $1 seconds");
+        DSystem.log("The Mine call to you in $1 seconds", delay_to_spawn);
         return SkillResult.SUCESSFULL;
     }
 
@@ -187,37 +187,43 @@ public class Hole extends TargetBlockSkill {
 
         @Override
         public void initTimeEffect() {
-            DSystem.log("The Mine disapear in $1 seconds");
-            Block tmp;
-            for (int j = 0; j < 6; j++) {
-                tmp = block;
-                for (int i = 0; i < MOVMENT.length; i++) {
-                    tmp = tmp.getRelative(MOVMENT[i][0], MOVMENT[i][1],
-                            MOVMENT[i][2]);
-                    store.add(tmp.getState());
-                    if (tmp.getType() != Material.DIAMOND_ORE) {
-                        tmp.setType(Material.AIR);
+            try {
+                DSystem.log("The Mine disapear in $1 seconds",
+                        getDurationInSeconds());
+                Block tmp;
+                for (int j = 0; j < 6; j++) {
+                    tmp = block;
+                    for (int i = 0; i < MOVMENT.length; i++) {
+                        tmp = tmp.getRelative(MOVMENT[i][0], MOVMENT[i][1],
+                                MOVMENT[i][2]);
+                        store.add(tmp.getState());
+                        if (tmp.getType() != Material.DIAMOND_ORE) {
+                            DUtils.transformBlock(player, tmp, Material.AIR);
+                        }
                     }
+                    block = block.getRelative(0, -1, 0);
                 }
-                block = block.getRelative(0, -1, 0);
-            }
-            tmp = block.getRelative(0, 1, 0);
-            for (int i = 0; i < STAIRS.length; i++) {
-                tmp = tmp.getRelative(STAIRS[i][0], STAIRS[i][1], STAIRS[i][2]);
-                Block tmp2 = tmp;
-                for (int k = 0; k < 6 - i; k++) {
-                    tmp2 = tmp2.getRelative(0, 1, 0);
-                    store.add(tmp2.getState());
-                    tmp2.setType(Material.AIR);
+                tmp = block.getRelative(0, 1, 0);
+                for (int i = 0; i < STAIRS.length; i++) {
+                    tmp = tmp.getRelative(STAIRS[i][0], STAIRS[i][1],
+                            STAIRS[i][2]);
+                    Block tmp2 = tmp;
+                    for (int k = 0; k < 6 - i; k++) {
+                        tmp2 = tmp2.getRelative(0, 1, 0);
+                        store.add(tmp2.getState());
+                        DUtils.transformBlock(player, tmp2, Material.AIR);
 
+                    }
+                    store.add(tmp.getState());
+                    DUtils.transformBlock(player, tmp, Material.BEDROCK);
                 }
-                store.add(tmp.getState());
-                tmp.setType(Material.BEDROCK);
-            }
-            for (int i = 0; i < RING.length; i++) {
-                tmp = tmp.getRelative(RING[i][0], RING[i][1], RING[i][2]);
-                store.add(tmp.getState());
-                tmp.setType(Material.BEDROCK);
+                for (int i = 0; i < RING.length; i++) {
+                    tmp = tmp.getRelative(RING[i][0], RING[i][1], RING[i][2]);
+                    store.add(tmp.getState());
+                    DUtils.transformBlock(player, tmp, Material.BEDROCK);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

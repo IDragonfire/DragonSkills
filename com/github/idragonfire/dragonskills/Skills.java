@@ -20,6 +20,7 @@ import api.DSystem;
 import api.Skill;
 
 import com.github.idragonfire.dragonskills.skills.DiaFinder;
+import com.github.idragonfire.dragonskills.skills.Firewall;
 import com.github.idragonfire.dragonskills.skills.Hole;
 import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
@@ -38,6 +39,7 @@ public class Skills {
         skills.add(new DiaFinder(plugin));
         skills.add(new Hole(plugin));
         skills.add(new LeaveWall(plugin));
+        skills.add(new Firewall(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);

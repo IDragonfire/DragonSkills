@@ -3,6 +3,7 @@ package api;
 import org.bukkit.Bukkit;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
+import com.github.idragonfire.dragonskills.utils.DUtils;
 
 public abstract class TimeEffect implements Runnable {
     private long duration;
@@ -49,7 +50,13 @@ public abstract class TimeEffect implements Runnable {
         return duration;
     }
 
-    public abstract void initTimeEffect();
+    public int getDurationInSeconds() {
+        return (int) (getDuration() / DUtils.TICKS);
+    }
+
+    public void initTimeEffect() {
+        // maybe nothing
+    }
 
     public abstract void endTimeEffect();
 }

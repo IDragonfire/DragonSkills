@@ -109,9 +109,9 @@ public class DiaFinder extends TargetBlockSkill {
             }
         }
         if (diamonds > 0) {
-            DSystem.log("Found : " + diamonds);
+            DSystem.log("Found $1 diamonds", diamonds);
         } else {
-            DSystem.log("Found nothing");
+            DSystem.log("Found $1", "nothing");
         }
         return SkillResult.SUCESSFULL;
     }

@@ -9,6 +9,12 @@ commands:
     usage: /<command> [skill name]
     permission: dragonskills.bind
     permission-message: You don't have <permission>
+  unbind:
+    aliases: ['u']
+    description: unbind the current material
+    usage: /<command>
+    permission: dragonskills.unbind
+    permission-message: You don't have <permission>
   skill:
     aliases: ['s']
     description: use a skill
