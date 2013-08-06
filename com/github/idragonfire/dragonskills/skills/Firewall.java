@@ -8,12 +8,12 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
-import api.DSystem;
-import api.SkillResult;
-import api.TargetBlockSkill;
-import api.TimeEffect;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
+import com.github.idragonfire.dragonskills.api.DSystem;
+import com.github.idragonfire.dragonskills.api.SkillResult;
+import com.github.idragonfire.dragonskills.api.TargetBlockSkill;
+import com.github.idragonfire.dragonskills.api.TimeEffect;
 import com.github.idragonfire.dragonskills.utils.DUtils;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 

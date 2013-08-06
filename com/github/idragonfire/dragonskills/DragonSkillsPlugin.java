@@ -9,9 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import api.DSystem;
-import api.Skill;
-import api.TimeEffect;
+import com.github.idragonfire.dragonskills.api.DSystem;
+import com.github.idragonfire.dragonskills.api.Skill;
+import com.github.idragonfire.dragonskills.api.TimeEffect;
+
 
 public class DragonSkillsPlugin extends JavaPlugin {
     private Skills skills;

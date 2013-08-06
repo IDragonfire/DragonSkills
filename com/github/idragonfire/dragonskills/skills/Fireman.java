@@ -5,10 +5,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import api.SkillResult;
-import api.TargetBlockSkill;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
+import com.github.idragonfire.dragonskills.api.SkillResult;
+import com.github.idragonfire.dragonskills.api.TargetBlockSkill;
 import com.github.idragonfire.dragonskills.utils.DUtils;
 
 public class Fireman extends TargetBlockSkill {

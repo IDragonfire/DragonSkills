@@ -15,10 +15,10 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import api.ActiveSkill;
-import api.DSystem;
-import api.Skill;
 
+import com.github.idragonfire.dragonskills.api.ActiveSkill;
+import com.github.idragonfire.dragonskills.api.DSystem;
+import com.github.idragonfire.dragonskills.api.Skill;
 import com.github.idragonfire.dragonskills.skills.DiaFinder;
 import com.github.idragonfire.dragonskills.skills.Fireman;
 import com.github.idragonfire.dragonskills.skills.Firewall;

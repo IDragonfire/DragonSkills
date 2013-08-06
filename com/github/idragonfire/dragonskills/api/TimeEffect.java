@@ -1,4 +1,4 @@
-package api;
+package com.github.idragonfire.dragonskills.api;
 
 import org.bukkit.Bukkit;
 

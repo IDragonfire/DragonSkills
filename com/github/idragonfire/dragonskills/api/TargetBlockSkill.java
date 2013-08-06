@@ -1,4 +1,4 @@
-package api;
+package com.github.idragonfire.dragonskills.api;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
