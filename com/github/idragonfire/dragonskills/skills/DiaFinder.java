@@ -9,21 +9,15 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import api.ActiveSkill;
 import api.DSystem;
 import api.SkillResult;
+import api.TargetBlockSkill;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.utils.DUtils;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
-import com.github.idragonfire.dragonskills.utils.DUtils.Direction;
 
-public class DiaFinder extends ActiveSkill {
-    private static final int FRONT = 0;
-    private static final int RIGHT = 1;
-    private static final int BACK = 2;
-    private static final int LEFT = 3;
-    private static final int MAX_DISTANCE = 100;
+public class DiaFinder extends TargetBlockSkill {
     private final Material[] ALLOWED_MATERIALS = new Material[] {
             Material.STONE, Material.DIAMOND_ORE, Material.GOLD_ORE,
             Material.IRON_ORE, Material.COAL_ORE, Material.REDSTONE_ORE,
@@ -31,9 +25,9 @@ public class DiaFinder extends ActiveSkill {
             Material.FENCE, Material.MOSSY_COBBLESTONE };
 
     @SkillConfig
-    private int distance = MAX_DISTANCE;
+    private int checkDistance = 100;
     @SkillConfig
-    private HashSet<Material> allowedMaterials;
+    private HashSet<Material> allowedMaterialsForTunnelDestruction;
 
     public DiaFinder(DragonSkillsPlugin plugin) {
         super(plugin);
@@ -42,9 +36,9 @@ public class DiaFinder extends ActiveSkill {
         // setUsage("/skill diafinder");
         // setIdentifiers(new String[] { "skill diafinder" });
         // setTypes(new SkillType[] { SkillType.ITEM });
-        allowedMaterials = new HashSet<Material>();
+        allowedMaterialsForTunnelDestruction = new HashSet<Material>();
         for (int i = 0; i < ALLOWED_MATERIALS.length; i++) {
-            allowedMaterials.add(ALLOWED_MATERIALS[i]);
+            allowedMaterialsForTunnelDestruction.add(ALLOWED_MATERIALS[i]);
         }
     }
 
@@ -79,146 +73,78 @@ public class DiaFinder extends ActiveSkill {
     // return node;
     // }
 
-    @SuppressWarnings("boxing")
     @Override
-    public SkillResult use(Player player) {
-        try {
-            Block wTargetBlock = player.getLocation().getBlock();
-            Direction direction = DUtils.getCardinalDirection(player);
-            BlockFace[] vector = transformBlockFace(direction);
+    public SkillResult use(final Player player, final Block targetBlock) {
+        BlockFace[] faces = DUtils.getDirections(player);
+        int diamonds = 0;
+        ArrayList<Block> startBlocks = new ArrayList<Block>();
+        startBlocks.add(targetBlock);
+        startBlocks.add(targetBlock.getRelative(BlockFace.DOWN));
+        startBlocks.add(targetBlock.getRelative(BlockFace.UP));
+        startBlocks.add(targetBlock.getRelative(faces[DUtils.LEFT]));
+        startBlocks.add(targetBlock.getRelative(faces[DUtils.RIGHT]));
+        startBlocks.add(startBlocks.get(2).getRelative(BlockFace.UP));
+        startBlocks.add(startBlocks.get(3).getRelative(BlockFace.UP));
+        startBlocks.add(startBlocks.get(4).getRelative(BlockFace.UP));
+        for (int i = 0; i < startBlocks.size(); i++) {
+            if (isProtected(player, startBlocks.get(i))) {
 
-            boolean areaProtected = false;
-            int diamonds = 0;
-            ArrayList<Block> startBlocks = new ArrayList<Block>();
-            startBlocks.add(wTargetBlock);
-            startBlocks.add(wTargetBlock.getRelative(BlockFace.DOWN));
-            startBlocks.add(wTargetBlock.getRelative(BlockFace.UP));
-            startBlocks.add(wTargetBlock.getRelative(vector[LEFT]));
-            startBlocks.add(wTargetBlock.getRelative(vector[RIGHT]));
-            startBlocks.add(startBlocks.get(2).getRelative(BlockFace.UP));
-            startBlocks.add(startBlocks.get(3).getRelative(BlockFace.UP));
-            startBlocks.add(startBlocks.get(4).getRelative(BlockFace.UP));
-            for (int i = 0; i < startBlocks.size(); i++) {
-                Block tmpBlock = startBlocks.get(i).getRelative(vector[FRONT]);
-                // if (isProtected(hero, tmpBlock)) {
-                // areaProtected = true;
-                // break;
-                // }
-                tmpBlock
-                        .breakNaturally(new ItemStack(Material.DIAMOND_PICKAXE));
-                if (i == 1) {
-                    for (int j = 0; j < 36; j++) {
-                        tmpBlock.setType(Material.TORCH);
-                    }
-
+                continue;
+            }
+            startBlocks.get(i).breakNaturally(
+                    new ItemStack(Material.DIAMOND_PICKAXE));
+            if (i == 1) {
+                startBlocks.get(i).setType(Material.TORCH);
+            }
+        }
+        for (int i = 0; i < checkDistance; i++) {
+            for (int j = 0; j < startBlocks.size(); j++) {
+                startBlocks.set(j, startBlocks.get(j).getRelative(
+                        faces[DUtils.FRONT]));
+                if (startBlocks.get(j).getType() == Material.DIAMOND_ORE) {
+                    diamonds++;
                 }
+                // player.sendBlockChange(startBlocks.get(j).getLocation(),
+                // Material.GLASS, (byte) 0);
             }
-            // int maxDistance = SkillConfigManager.getUseSetting(hero, this,
-            // Setting.AMOUNT.node(), MAX_DISTANCE, false);
-            int maxDistance = 100;
-            for (int i = 0; i < maxDistance; i++) {
-                for (int j = 0; j < startBlocks.size(); j++) {
-                    startBlocks.set(j, startBlocks.get(j).getRelative(
-                            vector[FRONT]));
-                    // hero.getPlayer().sendBlockChange(
-                    // startBlocks.get(j).getLocation(), Material.GLASS,
-                    // (byte) 0);
-
-                    if (startBlocks.get(j).getType() == Material.DIAMOND_ORE) {
-                        diamonds++;
-                    }
-                    // player.sendBlockChange(startBlocks.get(j).getLocation(),
-                    // Material.GLASS, (byte) 0);
-                }
-            }
-            if (areaProtected) {
-                return SkillResult.FAIL;
-            }
-            if (diamonds > 0) {
-                DSystem.log("Found : " + diamonds);
-                // Messaging.send(player, "Found $1 Diamond Ore in the $2",
-                // new Object[] { diamonds, direction });
-            } else {
-                DSystem.log("Found nothing");
-                // Messaging.send(player,
-                // "No Diamond Ore found within $1 blocks in the $2",
-                // new Object[] { maxDistance, direction });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return SkillResult.FAIL;
+        }
+        if (diamonds > 0) {
+            DSystem.log("Found : " + diamonds);
+        } else {
+            DSystem.log("Found nothing");
         }
         return SkillResult.SUCESSFULL;
     }
 
-    // @SuppressWarnings("unqualified-field-access")
-    // private boolean isProtected(Hero hero, Block block) {
-    // boolean allowed = true;
-    // if (!allowedMaterials.contains(block.getType())) {
-    // Messaging.send(hero.getPlayer(), "Not possible to cast into "
-    // + block.getType());
-    // return true;
-    // }
-    // if (useTowny) {
-    // allowed = PlayerCacheUtil.getCachePermission(hero.getPlayer(),
-    // block.getLocation(), new Integer(54), (byte) 0,
-    // TownyPermission.ActionType.BUILD);
-    // if (!allowed) {
-    // Messaging.send(hero.getPlayer(),
-    // "$1 Your are not allowed to build here",
-    // new Object[] { "Towny:" });
-    // System.out.println(hero.getPlayer().getDisplayName()
-    // + " try to use Skill " + getName() + " in towny area "
-    // + block.getLocation());
-    // return true;
-    // }
-    // }
-    // if (useWorldGuard) {
-    // allowed = worldGuard
-    // .canBuild(hero.getPlayer(), block.getLocation());
-    // if (!allowed) {
-    // Messaging.send(hero.getPlayer(),
-    // "$1 Your are not allowed to build here",
-    // new Object[] { "WorldGuard:" });
-    // System.out.println(hero.getPlayer().getDisplayName()
-    // + " try to use Skill " + getName()
-    // + " in world guard area " + block.getLocation());
-    // return true;
-    // }
-    // }
-    // return !allowed;
-    // }
-
-    private static BlockFace[] transformBlockFace(DUtils.Direction direction) {
-        BlockFace[] vectors = new BlockFace[4];
-        switch (direction) {
-        case NORTH:
-            vectors[FRONT] = BlockFace.WEST;
-            vectors[RIGHT] = BlockFace.NORTH;
-            vectors[BACK] = BlockFace.EAST;
-            vectors[LEFT] = BlockFace.SOUTH;
-            return vectors;
-        case EAST:
-            vectors[FRONT] = BlockFace.NORTH;
-            vectors[RIGHT] = BlockFace.EAST;
-            vectors[BACK] = BlockFace.SOUTH;
-            vectors[LEFT] = BlockFace.WEST;
-            return vectors;
-        case SOUTH:
-            vectors[FRONT] = BlockFace.EAST;
-            vectors[RIGHT] = BlockFace.SOUTH;
-            vectors[BACK] = BlockFace.WEST;
-            vectors[LEFT] = BlockFace.NORTH;
-            return vectors;
-        case WEST:
-            vectors[FRONT] = BlockFace.SOUTH;
-            vectors[RIGHT] = BlockFace.WEST;
-            vectors[BACK] = BlockFace.NORTH;
-            vectors[LEFT] = BlockFace.EAST;
-
-            return vectors;
-        default:
-            return null;
-        }
+    private boolean isProtected(Player player, Block block) {
+        return !allowedMaterialsForTunnelDestruction.contains(block.getType());
+        // if (useTowny) {
+        // allowed = PlayerCacheUtil.getCachePermission(hero.getPlayer(),
+        // block.getLocation(), new Integer(54), (byte) 0,
+        // TownyPermission.ActionType.BUILD);
+        // if (!allowed) {
+        // Messaging.send(hero.getPlayer(),
+        // "$1 Your are not allowed to build here",
+        // new Object[] { "Towny:" });
+        // System.out.println(hero.getPlayer().getDisplayName()
+        // + " try to use Skill " + getName() + " in towny area "
+        // + block.getLocation());
+        // return true;
+        // }
+        // }
+        // if (useWorldGuard) {
+        // allowed = worldGuard
+        // .canBuild(hero.getPlayer(), block.getLocation());
+        // if (!allowed) {
+        // Messaging.send(hero.getPlayer(),
+        // "$1 Your are not allowed to build here",
+        // new Object[] { "WorldGuard:" });
+        // System.out.println(hero.getPlayer().getDisplayName()
+        // + " try to use Skill " + getName()
+        // + " in world guard area " + block.getLocation());
+        // return true;
+        // }
+        // }
+        // return !allowed;
     }
 }

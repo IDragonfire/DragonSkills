@@ -1,5 +1,8 @@
 package com.github.idragonfire.dragonskills;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,18 +11,37 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import api.DSystem;
 import api.Skill;
+import api.TimeEffect;
 
 public class DragonSkillsPlugin extends JavaPlugin {
     private Skills skills;
     private PlayerStorage players;
+    private List<TimeEffect> effects;
 
     @Override
     public void onEnable() {
+        effects = new ArrayList<TimeEffect>();
         players = new PlayerStorage(this);
         skills = new Skills(this);
         Bukkit.getPluginManager().registerEvents(players, this);
         Bukkit.getPluginManager()
                 .registerEvents(new PlayerListener(this), this);
+    }
+
+    @Override
+    public void onDisable() {
+        // end all time effects
+        for (TimeEffect effect : effects) {
+            effect.endTimeEffect();
+        }
+    }
+
+    public void addTimeEffect(TimeEffect newEffect) {
+        effects.add(newEffect);
+    }
+
+    public void removeTimeEffect(TimeEffect oldEffect) {
+        effects.remove(oldEffect);
     }
 
     @Override

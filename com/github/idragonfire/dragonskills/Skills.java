@@ -137,7 +137,6 @@ public class Skills {
 
         for (Field field : getSkillConfigFields(skill)) {
             try {
-                DSystem.log(field.getName());
                 field.setAccessible(true);
                 Object toSave = field.get(skill);
                 if (toSave instanceof Set<?>) {

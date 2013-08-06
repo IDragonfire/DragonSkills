@@ -2,23 +2,17 @@ package com.github.idragonfire.dragonskills.skills;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Vector;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.plugin.Plugin;
 
 import api.ActiveSkill;
 import api.DSystem;
 import api.SkillResult;
+import api.TimeEffect;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
@@ -55,9 +49,8 @@ public class Hole extends ActiveSkill {
             { -1, 0, -1 }, FRONT, { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 },
             RIGHT, { 1, 0, 1 }, { 1, 0, 1 }, { 1, 0, 1 }, BACK, BACK, BACK,
             { -1, 0, 1 }, { -1, 0, 1 }, LEFT, LEFT };
-    private final Vector<HoleEffect> RESTORE = new Vector<HoleEffect>();
     @SkillConfig
-    private int hole_time = HOLE_TIME;
+    private int holeTime = HOLE_TIME;
     @SkillConfig
     private int delay_to_spawn = DELAY_TO_SPAWN;
 
@@ -71,8 +64,8 @@ public class Hole extends ActiveSkill {
         for (int i = 0; i < ALLOWED_MATERIALS.length; i++) {
             ALLOWED.add(ALLOWED_MATERIALS[i]);
         }
-        Bukkit.getServer().getPluginManager().registerEvents(
-                new HoleRestore(plugin), plugin);
+        // Bukkit.getServer().getPluginManager().registerEvents(
+        // new HoleRestore(plugin), plugin);
     }
 
     // @Override
@@ -121,28 +114,9 @@ public class Hole extends ActiveSkill {
         // final int delayToSpawn = SkillConfigManager.getUseSetting(hero, this,
         // DELAY_TO_SPAWN_NODE, DELAY_TO_SPAWN, false);
 
-        final int holeTime = HOLE_TIME;
-        final int delayToSpawn = DELAY_TO_SPAWN;
-        final HoleEffect holeEffect = new HoleEffect(player, holeTime,
-                startBlock);
-        RESTORE.add(holeEffect);
-
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    try {
-                        Thread.sleep(delayToSpawn);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    holeEffect.start();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        t.start();
+        final HoleEffect holeEffect = new HoleEffect(getPlugin(),
+                holeTime * 20, player, startBlock);
+        holeEffect.startEffect();
         DSystem.log("The Mine call to you in $1 seconds");
         return SkillResult.SUCESSFULL;
     }
@@ -205,21 +179,21 @@ public class Hole extends ActiveSkill {
         return !allowed;
     }
 
-    public class HoleEffect extends Thread {
+    public class HoleEffect extends TimeEffect {
         private Block block = null;
         private ArrayList<BlockState> store;
-        private long duration;
         private Player player;
 
-        public HoleEffect(Player player, long duration, Block startBlock) {
+        public HoleEffect(DragonSkillsPlugin plugin, long duration,
+                Player player, Block startBlock) {
+            super(plugin, duration);
             block = startBlock;
             store = new ArrayList<BlockState>();
             this.player = player;
-            this.duration = duration;
         }
 
-        public void applyToHero(Player player) {
-            // super.applyToHero(hero);
+        @Override
+        public void initTimeEffect() {
             DSystem.log("The Mine disapear in $1 seconds");
             Block tmp;
             for (int j = 0; j < 6; j++) {
@@ -254,10 +228,10 @@ public class Hole extends ActiveSkill {
             }
         }
 
-        public void removeFromHero(Player player) {
+        @Override
+        public void endTimeEffect() {
             DSystem.log("Mine has gone");
             restore();
-            RESTORE.remove(this);
         }
 
         public void restore() {
@@ -265,35 +239,6 @@ public class Hole extends ActiveSkill {
                 store.get(j).update(true);
             }
             store.clear();
-        }
-
-        @Override
-        public void run() {
-            applyToHero(player);
-            try {
-                Thread.sleep(duration);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            removeFromHero(player);
-        }
-    }
-
-    public class HoleRestore implements Listener {
-        private Plugin pl;
-
-        public HoleRestore(Plugin pl) {
-            this.pl = pl;
-        }
-
-        @SuppressWarnings("synthetic-access")
-        @EventHandler(priority = EventPriority.HIGHEST)
-        public void onPluginDisable(PluginDisableEvent event) {
-            if (event.getPlugin() == pl && RESTORE.size() > 0) {
-                for (int i = 0; i < RESTORE.size(); i++) {
-                    RESTORE.get(0).restore();
-                }
-            }
         }
     }
 }

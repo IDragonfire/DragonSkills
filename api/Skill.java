@@ -12,4 +12,8 @@ public abstract class Skill {
     public String getSkillName() {
         return this.getClass().getSimpleName();
     }
+
+    public DragonSkillsPlugin getPlugin() {
+        return plugin;
+    }
 }
