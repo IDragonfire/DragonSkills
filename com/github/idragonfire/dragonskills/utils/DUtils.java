@@ -5,14 +5,20 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
+
+import api.DSystem;
 
 public class DUtils {
-    public static final int[] LEFT = new int[] { -1, 0, 0 };
-    public static final int[] RIGHT = new int[] { 1, 0, 0 };
-    public static final int[] BACK = new int[] { 0, 0, 1 };
-    public static final int[] FRONT = new int[] { 0, 0, -1 };
+    public static final int FRONT = 0;
+    public static final int RIGHT = 1;
+    public static final int BACK = 2;
+    public static final int LEFT = 3;
+    // public static final int[] LEFT = new int[] { -1, 0, 0 };
+    // public static final int[] RIGHT = new int[] { 1, 0, 0 };
+    // public static final int[] BACK = new int[] { 0, 0, 1 };
+    // public static final int[] FRONT = new int[] { 0, 0, -1 };
 
     private static Random rand = new Random();
 
@@ -24,13 +30,67 @@ public class DUtils {
         NORTH, EAST, SOUTH, WEST, INVALID;
     }
 
+    public static BlockFace[] getDirections(Player player) {
+        Direction direction = getDirection(player);
+        DSystem.log("" + direction);
+
+        BlockFace[] faces = new BlockFace[4];
+        if (direction == Direction.NORTH) {
+            faces[FRONT] = BlockFace.WEST;
+            faces[RIGHT] = BlockFace.NORTH;
+            faces[BACK] = BlockFace.EAST;
+            faces[LEFT] = BlockFace.SOUTH;
+            return faces;
+        }
+        if (direction == Direction.EAST) {
+            faces[FRONT] = BlockFace.NORTH;
+            faces[RIGHT] = BlockFace.EAST;
+            faces[BACK] = BlockFace.SOUTH;
+            faces[LEFT] = BlockFace.WEST;
+            return faces;
+        }
+        if (direction == Direction.SOUTH) {
+            faces[FRONT] = BlockFace.EAST;
+            faces[RIGHT] = BlockFace.SOUTH;
+            faces[BACK] = BlockFace.WEST;
+            faces[LEFT] = BlockFace.NORTH;
+            return faces;
+        }
+        if (direction == Direction.WEST) {
+            faces[FRONT] = BlockFace.SOUTH;
+            faces[RIGHT] = BlockFace.WEST;
+            faces[BACK] = BlockFace.NORTH;
+            faces[LEFT] = BlockFace.EAST;
+            return faces;
+        }
+
+        return faces;
+    }
+
+    public static Direction getDirection(Player player) {
+        double rotation = (player.getLocation().getYaw() - 90) % 360;
+        if (rotation < 0) {
+            rotation += 360.0;
+        }
+        if (45 <= rotation && rotation < 135) {
+            return Direction.EAST;
+        }
+        if (135 <= rotation && rotation < 225) {
+            return Direction.SOUTH;
+        }
+        if (225 <= rotation && rotation < 315) {
+            return Direction.WEST;
+        }
+        // rotation < 45 && 315 <= rotation
+        return Direction.NORTH;
+    }
+
     public static Direction getCardinalDirection(Player player) {
         double rotation = (player.getLocation().getYaw() - 90) % 360;
         if (rotation < 0) {
             rotation += 360.0;
         }
         if (0 <= rotation && rotation < 22.5) {
-
             return Direction.NORTH;
         } else if (22.5 <= rotation && rotation < 67.5) {
             // NE
@@ -54,15 +114,6 @@ public class DUtils {
             return Direction.NORTH;
         }
         return Direction.INVALID;
-    }
-
-    public static Vector getDirection(Player player) {
-        try {
-            return player.getLocation().getDirection();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private static HashSet<Material> allowedGrassMaterials = new HashSet<Material>();

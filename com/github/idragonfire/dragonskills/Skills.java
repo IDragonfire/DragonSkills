@@ -91,6 +91,7 @@ public class Skills {
         return list;
     }
 
+    // TODO: move to skills
     public void load(Skill skill) {
         File file = new File(skillFolder.getAbsolutePath() + File.separator
                 + skill.getSkillName().toLowerCase() + ".yml");
@@ -128,6 +129,7 @@ public class Skills {
         }
     }
 
+    // TODO: move to skills
     public void save(Skill skill) {
         File file = new File(skillFolder.getAbsolutePath() + File.separator
                 + skill.getSkillName().toLowerCase() + ".yml");

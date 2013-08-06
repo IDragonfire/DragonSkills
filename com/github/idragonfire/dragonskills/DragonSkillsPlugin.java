@@ -4,10 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import api.DSystem;
@@ -22,15 +18,8 @@ public class DragonSkillsPlugin extends JavaPlugin {
         players = new PlayerStorage(this);
         skills = new Skills(this);
         Bukkit.getPluginManager().registerEvents(players, this);
-        Bukkit.getPluginManager().registerEvents(new Listener() {
-            @EventHandler(priority = EventPriority.LOWEST)
-            public void onPlayerInteract(PlayerInteractEvent event) {
-                players.getDPlayer(event.getPlayer()).onPlayerInteractEvent(
-                        skills, event.getPlayer().getItemInHand().getType(),
-                        event);
-
-            }
-        }, this);
+        Bukkit.getPluginManager()
+                .registerEvents(new PlayerListener(this), this);
     }
 
     @Override
@@ -67,5 +56,14 @@ public class DragonSkillsPlugin extends JavaPlugin {
             }
         }
         return true;
+    }
+
+    public PlayerStorage getPlayerStorage() {
+        return players;
+
+    }
+
+    public Skills getSkills() {
+        return skills;
     }
 }
