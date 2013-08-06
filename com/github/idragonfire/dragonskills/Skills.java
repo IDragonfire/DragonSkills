@@ -15,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-
 import com.github.idragonfire.dragonskills.api.ActiveSkill;
 import com.github.idragonfire.dragonskills.api.DSystem;
 import com.github.idragonfire.dragonskills.api.Skill;
@@ -80,9 +79,13 @@ public class Skills {
             DSystem.log("no active skill");
             return;
         }
+        if (player.hasCooldown(skillName)) {
+            DSystem.log("on cooldown");
+            return;
+        }
         ActiveSkill skill = (ActiveSkill) getSkill(skillName);
         skill.use(player.getBukkitPlayer());
-        player.addCooldown(skillName, 30);
+        player.addCooldown(skillName, skill.getCooldown());
     }
 
     public List<String> materialList(Set<?> materialList) {

@@ -49,6 +49,14 @@ public class DPlayer {
         save();
     }
 
+    public boolean hasCooldown(String skillName) {
+        if (!cooldowns.containsKey(skillName)) {
+            return false;
+        }
+        return cooldowns.get(skillName).compareTo(
+                Calendar.getInstance().getTime()) > 0;
+    }
+
     public boolean hasBind(Material material) {
         return bindList.containsKey(material);
     }
@@ -104,6 +112,10 @@ public class DPlayer {
             throws FileNotFoundException, IOException,
             InvalidConfigurationException {
         DPlayer player = new DPlayer(file, bukkitPlayer);
+        if (!file.exists()) {
+            player.save();
+            return player;
+        }
         FileConfiguration playerData = new YamlConfiguration();
 
         playerData.load(file);
