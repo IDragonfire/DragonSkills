@@ -109,8 +109,4 @@ public class LeaveWall extends TargetBlockSkill {
                     leaveValue);
         }
     }
-
-    private Block getRelative(Block block, int[] pos) {
-        return block.getRelative(pos[0], pos[1], pos[2]);
-    }
 }
