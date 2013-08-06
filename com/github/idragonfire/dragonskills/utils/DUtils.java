@@ -8,8 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import api.DSystem;
-
 public class DUtils {
     public static final int FRONT = 0;
     public static final int RIGHT = 1;
@@ -32,8 +30,6 @@ public class DUtils {
 
     public static BlockFace[] getDirections(Player player) {
         Direction direction = getDirection(player);
-        DSystem.log("" + direction);
-
         BlockFace[] faces = new BlockFace[4];
         if (direction == Direction.NORTH) {
             faces[FRONT] = BlockFace.WEST;
