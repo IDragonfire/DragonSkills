@@ -111,7 +111,7 @@ public class LeaveWall extends TargetBlockSkill {
 
     @Override
     public String getDescription() {
-        return DSystem.paramString("Spawn a $1x$2x$s wall of Leaves",
+        return DSystem.paramString("Spawn a $1x$2x$3 wall of Leaves",
                 wall_height, wall_width, wall_thickness);
     }
 }

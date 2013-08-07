@@ -22,8 +22,12 @@ commands:
     permission: dragonskills.skill
     permission-message: You don't have <permission>
   skills:
-    aliases: ['skill_list', 'skillist']
+    aliases: ['skill_list']
     description: show all skills
     usage: /<command>
     permission: dragonskills.skill_list
+  skilldesc:
+    alias: ['skillhelp']
+    description: show skill description
+    usage: /<command> [skill name]
     permission-message: You don't have <permission>

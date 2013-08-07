@@ -60,13 +60,6 @@ public class Hole extends TargetBlockSkill {
     }
 
     @Override
-    public String getDescription() {
-        return DSystem.paramString(
-                "spawn a hole after $1 seconds, that is only $2 seconds open",
-                holeDelay, holeTime);
-    }
-
-    @Override
     public SkillResult use(Player player, Block startBlock) {
         if (!canPlaceHole(player, startBlock)) {
             DSystem.log("Cannot place mine here");
@@ -203,5 +196,12 @@ public class Hole extends TargetBlockSkill {
             }
             store.clear();
         }
+    }
+
+    @Override
+    public String getDescription() {
+        return DSystem.paramString(
+                "spawn a hole after $1 seconds, that is only $2 seconds open",
+                holeDelay, holeTime);
     }
 }

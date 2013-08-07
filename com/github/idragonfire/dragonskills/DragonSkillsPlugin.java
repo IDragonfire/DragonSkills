@@ -52,21 +52,23 @@ public class DragonSkillsPlugin extends JavaPlugin {
             String label, String[] args) {
         String cmd = command.getName();
         Set<String> consoleSupport = new HashSet<String>(Arrays
-                .asList(new String[] { "skills" }));
+                .asList(new String[] { "skills", "skilldesc" }));
         if (!(sender instanceof Player) && !consoleSupport.contains(cmd)) {
             sender.sendMessage("This command can only be run by a player.");
             return true;
         }
-        Player player = (Player) sender;
-
         if (cmd.equals("skill")) {
             if (args.length != 1) {
                 sender.sendMessage("Skill name missing");
                 return true;
             }
-            skills.useSkill(args[0], players.getDPlayer(player));
+            skills.useSkill(args[0], players.getDPlayer((Player) sender));
         } else if (cmd.equals("bind")) {
             if (args.length != 1) {
+                if (args.length == 2 && args[1].equals('?')) {
+                    // TODO: help:
+                    sender.sendMessage("help");
+                }
                 sender.sendMessage("Skill name missing");
                 return true;
             }
@@ -74,11 +76,13 @@ public class DragonSkillsPlugin extends JavaPlugin {
                 sender.sendMessage("Skill not available");
                 return true;
             }
+            Player player = (Player) sender;
             players.getDPlayer(player).addBind(
                     player.getItemInHand().getType(), args[0]);
             sender.sendMessage(args[0] + " bind to "
                     + player.getItemInHand().getType());
         } else if (cmd.equals("unbind")) {
+            Player player = (Player) sender;
             players.getDPlayer(player).removeBind(
                     player.getItemInHand().getType());
             sender.sendMessage("remove bind");
@@ -86,7 +90,19 @@ public class DragonSkillsPlugin extends JavaPlugin {
             for (Skill skill : skills.getSkills()) {
                 DSystem.log(skill.getSkillName());
             }
+        } else if (cmd.equals("skilldesc")) {
+            if (args.length != 1) {
+                sender.sendMessage("Skill name missing");
+                return true;
+            }
+            Skill skill = skills.getSkill(args[0]);
+            if (skill == null) {
+                sender.sendMessage("no skill found");
+                return true;
+            }
+            sender.sendMessage(skill.getDescription());
         }
+
         return true;
     }
 

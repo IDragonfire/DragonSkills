@@ -61,7 +61,7 @@ public class Skills {
         return skillList.containsKey(skillName);
     }
 
-    private Skill getSkill(String skillName) {
+    public Skill getSkill(String skillName) {
         return skillList.get(skillName);
     }
 

@@ -35,14 +35,6 @@ public class DiaFinder extends TargetBlockSkill {
     }
 
     @Override
-    public String getDescription() {
-        return DSystem
-                .paramString(
-                        "Detect Diamond Ore up to $1 blocks in front of you, try to destroy some blocks in front of you and place a torch",
-                        checkDistance);
-    }
-
-    @Override
     public SkillResult use(final Player player, final Block targetBlock) {
         BlockFace[] faces = DUtils.getDirections(player);
         int diamonds = 0;
@@ -115,5 +107,13 @@ public class DiaFinder extends TargetBlockSkill {
         // }
         // }
         // return !allowed;
+    }
+
+    @Override
+    public String getDescription() {
+        return DSystem
+                .paramString(
+                        "Detect Diamond Ore up to $1 blocks in front of you, try to destroy some blocks in front of you and place a torch",
+                        checkDistance);
     }
 }
