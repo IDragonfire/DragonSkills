@@ -5,7 +5,7 @@ main: com.github.idragonfire.dragonskills.DragonSkillsPlugin
 commands:
   bind:
     aliases: ['b']
-    description: bind a skill on a item (material
+    description: bind a skill on a item (material)
     usage: /<command> [skill name]
     permission: dragonskills.bind
     permission-message: You don't have <permission>
@@ -18,7 +18,7 @@ commands:
   skill:
     aliases: ['s']
     description: use a skill
-    usage: /<command> [skill name]
+    usage: /<command> [skill name] {player name}
     permission: dragonskills.skill
     permission-message: You don't have <permission>
   skills:
@@ -31,3 +31,8 @@ commands:
     description: show skill description
     usage: /<command> [skill name]
     permission-message: You don't have <permission>
+  cd:
+    alias: ['cooldown']
+    description: show skill cooldwn
+    usage: /<command> [skill name] {player name}
+    permission-message: You don't have <permission>    

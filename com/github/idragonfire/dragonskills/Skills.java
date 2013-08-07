@@ -53,12 +53,8 @@ public class Skills {
         return new ArrayList<Skill>(skillList.values());
     }
 
-    public boolean hasSkillUnchecked(String skillName) {
+    public boolean hasSkill(String skillName) {
         return skillList.containsKey(skillName.toLowerCase());
-    }
-
-    private boolean hasSkill(String skillName) {
-        return skillList.containsKey(skillName);
     }
 
     public Skill getSkill(String skillName) {

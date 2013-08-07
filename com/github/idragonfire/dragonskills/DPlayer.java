@@ -57,6 +57,15 @@ public class DPlayer {
                 Calendar.getInstance().getTime()) > 0;
     }
 
+    public int getCooldown(String skillName) {
+        if (!cooldowns.containsKey(skillName)) {
+            return -1;
+        }
+        int seconds = (int) ((cooldowns.get(skillName).getTime() - Calendar
+                .getInstance().getTime().getTime()) / 1000);
+        return (seconds > 0) ? seconds : -1;
+    }
+
     public boolean hasBind(Material material) {
         return bindList.containsKey(material);
     }
