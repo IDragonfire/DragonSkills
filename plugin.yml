@@ -1,6 +1,6 @@
 name: DragonSkills
 author: IDragonfire
-version: 0.1
+version: 0.2
 main: com.github.idragonfire.dragonskills.DragonSkillsPlugin
 commands:
   bind:
