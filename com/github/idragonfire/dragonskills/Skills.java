@@ -18,12 +18,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import com.github.idragonfire.dragonskills.api.ActiveSkill;
 import com.github.idragonfire.dragonskills.api.DSystem;
 import com.github.idragonfire.dragonskills.api.Skill;
+import com.github.idragonfire.dragonskills.api.SkillResult;
 import com.github.idragonfire.dragonskills.skills.DiaFinder;
 import com.github.idragonfire.dragonskills.skills.Fireman;
 import com.github.idragonfire.dragonskills.skills.Firewall;
 import com.github.idragonfire.dragonskills.skills.Hole;
 import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.skills.Sponge;
+import com.github.idragonfire.dragonskills.skills.Waterfall;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
 public class Skills {
@@ -43,6 +45,7 @@ public class Skills {
         skills.add(new Firewall(plugin));
         skills.add(new Fireman(plugin));
         skills.add(new Sponge(plugin));
+        skills.add(new Waterfall(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);
@@ -82,8 +85,9 @@ public class Skills {
             return;
         }
         ActiveSkill skill = (ActiveSkill) getSkill(skillName);
-        skill.use(player.getBukkitPlayer());
-        player.addCooldown(skillName, skill.getCooldown());
+        if (skill.use(player.getBukkitPlayer()) == SkillResult.SUCESSFULL) {
+            player.addCooldown(skillName, skill.getCooldown());
+        }
     }
 
     public List<String> materialList(Set<?> materialList) {

@@ -194,10 +194,6 @@ public class DUtils {
         return true;
     }
 
-    private Block getRelative(Block block, int[] pos) {
-        return block.getRelative(pos[0], pos[1], pos[2]);
-    }
-
     // TODO: no return Block
     public static List<Block> sphere(Block block, double radiusX,
             double radiusY, double radiusZ, boolean filled) {
@@ -271,9 +267,5 @@ public class DUtils {
 
     private static final double lengthSq(double x, double y, double z) {
         return (x * x) + (y * y) + (z * z);
-    }
-
-    private static final double lengthSq(double x, double z) {
-        return (x * x) + (z * z);
     }
 }
