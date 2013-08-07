@@ -23,6 +23,7 @@ import com.github.idragonfire.dragonskills.skills.Fireman;
 import com.github.idragonfire.dragonskills.skills.Firewall;
 import com.github.idragonfire.dragonskills.skills.Hole;
 import com.github.idragonfire.dragonskills.skills.LeaveWall;
+import com.github.idragonfire.dragonskills.skills.Sponge;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
 public class Skills {
@@ -41,6 +42,7 @@ public class Skills {
         skills.add(new LeaveWall(plugin));
         skills.add(new Firewall(plugin));
         skills.add(new Fireman(plugin));
+        skills.add(new Sponge(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);
