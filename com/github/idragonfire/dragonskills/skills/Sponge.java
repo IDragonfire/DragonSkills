@@ -30,9 +30,10 @@ public class Sponge extends TargetBlockSkill {
     private int radius = 4;
     @SkillConfig
     private int spongeLifeTime = 5;
-    @SkillConfig
+
     private HashSet<Material> allowedMaterials = new HashSet<Material>(Arrays
-            .asList(new Material[] { Material.AIR, Material.WATER }));
+            .asList(new Material[] { Material.AIR, Material.WATER,
+                    Material.STATIONARY_WATER }));
 
     public Sponge(DragonSkillsPlugin plugin) {
         super(plugin);
