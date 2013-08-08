@@ -30,12 +30,8 @@ public class Waterfall extends TargetBlockSkill {
             DSystem.log("only allowed in the air");
             return SkillResult.FAIL;
         }
-        try {
-            DUtils.transformBlock(player, targetBlock, Material.WATER);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return SkillResult.SUCESSFULL;
+        return DUtils.transformBlock(player, targetBlock, Material.WATER) ? SkillResult.SUCESSFULL
+                : SkillResult.FAIL;
     }
 
     @Override

@@ -40,11 +40,7 @@ public class Fireman extends TargetBlockSkill {
 
     public void transform(Player player, Block b) {
         if (b.getType() == Material.FIRE) {
-            try {
-                DUtils.transformBlock(player, b, Material.AIR);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            DUtils.transformBlock(player, b, Material.AIR);
         }
         // player.sendBlockChange(b.getLocation(), Material.GLASS, (byte) 0);
     }

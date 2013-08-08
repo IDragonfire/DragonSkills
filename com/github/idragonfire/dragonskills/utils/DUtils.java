@@ -10,10 +10,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.plugin.Plugin;
 
-import com.earth2me.essentials.antibuild.AntiBuildConfig;
 import com.earth2me.essentials.antibuild.IAntiBuild;
 import com.github.idragonfire.dragonskills.TerrainException;
 
@@ -194,18 +196,44 @@ public class DUtils {
         }
     }
 
+    public static boolean canBreak(Player player, Block block) {
+        if (forbiddenMaterials.contains(block.getType())) {
+            return false;
+        }
+        BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
+        Bukkit.getPluginManager().callEvent(breakEvent);
+        return !breakEvent.isCancelled();
+    }
+
     public static boolean transformBlock(Player player, Block block, int type,
             byte data, boolean applyPhysics) {
         if (forbiddenMaterials.contains(block.getType())) {
             return false;
         }
-        if (essentials) {
-            if (ess.checkProtectionItems(AntiBuildConfig.blacklist_break, block
-                    .getTypeId())
-                    && !player.hasPermission("essentials.protect.exemptbreak")) {
-                return false;
-            }
+
+        BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
+        Bukkit.getPluginManager().callEvent(breakEvent);
+        if (breakEvent.isCancelled()) {
+            return false;
         }
+
+        BlockState state = block.getState();
+        block.setTypeIdAndData(type, data, false);
+        BlockPlaceEvent placeEvent = new BlockPlaceEvent(block, state, block,
+                player.getItemInHand(), player, true);
+        Bukkit.getPluginManager().callEvent(placeEvent);
+        if (placeEvent.isCancelled()) {
+            state.update(true);
+            return false;
+        }
+
+        // if (essentials) {
+        // if (ess.checkProtectionItems(AntiBuildConfig.blacklist_break, block
+        // .getTypeId())
+        // && !player.hasPermission("essentials.protect.exemptbreak")) {
+        // return false;
+        // }
+        // }
         // if (useTowny) {
         // boolean towny_allowed = PlayerCacheUtil.getCachePermission(hero
         // .getPlayer(), block.getLocation(), LEAVE_ID, (byte) 0,

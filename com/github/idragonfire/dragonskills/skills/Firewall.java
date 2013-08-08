@@ -47,21 +47,13 @@ public class Firewall extends TargetBlockSkill {
         for (int i = 0; i < store.length; i++) {
             store[i] = transform(left);
             if (store[i] != null) {
-                try {
-                    DUtils.transformBlock(player, left, Material.FIRE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                DUtils.transformBlock(player, left, Material.FIRE);
             }
             i++;
             if (i < store.length) {
                 store[i] = transform(right);
                 if (store[i] != null) {
-                    try {
-                        DUtils.transformBlock(player, right, Material.FIRE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    DUtils.transformBlock(player, right, Material.FIRE);
                 }
             }
             left = left.getRelative(faces[DUtils.LEFT]);

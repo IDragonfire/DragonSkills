@@ -57,13 +57,15 @@ public class Sponge extends TargetBlockSkill {
         }
         List<Block> blocks = DUtils.sphere(targetBlock, radius, radius, radius,
                 true);
+        for (Block b : blocks) {
+            if (!DUtils.canBreak(player, b)) {
+                DSystem.log("no permission");
+                return SkillResult.FAIL;
+            }
+        }
         SpongeEffect effect = new SpongeEffect(plugin, spongeLifeTime
                 * DUtils.TICKS, new HashSet<Block>(blocks), sponge);
-        try {
-            DUtils.transformBlock(player, sponge, Material.SPONGE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DUtils.transformBlock(player, sponge, Material.SPONGE);
         effect.startEffect();
         for (Block block : blocks) {
             if (block.getType() == Material.WATER) {
