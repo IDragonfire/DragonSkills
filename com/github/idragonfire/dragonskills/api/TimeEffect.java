@@ -16,7 +16,8 @@ public abstract class TimeEffect implements Runnable {
     }
 
     public void startEffect(long delay) {
-        if (delay <= 0) {
+        // need 0 to spawn new thread
+        if (delay < 0) {
             startEffect();
         } else {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,

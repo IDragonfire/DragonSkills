@@ -25,6 +25,7 @@ import com.github.idragonfire.dragonskills.skills.Firewall;
 import com.github.idragonfire.dragonskills.skills.Hole;
 import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.skills.Sponge;
+import com.github.idragonfire.dragonskills.skills.Wallhack;
 import com.github.idragonfire.dragonskills.skills.Waterfall;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
@@ -46,6 +47,7 @@ public class Skills {
         skills.add(new Fireman(plugin));
         skills.add(new Sponge(plugin));
         skills.add(new Waterfall(plugin));
+        skills.add(new Wallhack(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);
