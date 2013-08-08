@@ -54,7 +54,7 @@ public class Wallhack extends TargetBlockSkill {
         }
         WallHackEffect effect = new WallHackEffect(getPlugin(), duration
                 * DUtils.TICKS, blocks, player, faces);
-        effect.startEffect(2);
+        effect.startEffect(DUtils.TICK_DELAY);
         DSystem.log("You can look over the wall for $1 seconds", duration);
         return SkillResult.SUCESSFULL;
     }

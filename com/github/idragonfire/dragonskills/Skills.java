@@ -74,8 +74,14 @@ public class Skills {
 
     public void useSkill(String skillName, DPlayer player) {
         skillName = skillName.toLowerCase();
+        String perm = new StringBuilder("dragonskills.skill.")
+                .append(skillName).toString();
+        if (!player.getBukkitPlayer().hasPermission(perm)) {
+            DSystem.log("missing perm $1", perm);
+            return;
+        }
         if (!hasSkill(skillName)) {
-            DSystem.log("found no skill: " + skillName);
+            DSystem.log("skill $1 not found", skillName);
             return;
         }
         if (!(getSkill(skillName) instanceof ActiveSkill)) {

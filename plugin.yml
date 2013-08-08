@@ -1,6 +1,6 @@
 name: DragonSkills
 author: IDragonfire
-version: 0.3
+version: 0.4
 main: com.github.idragonfire.dragonskills.DragonSkillsPlugin
 soft-depend: [EssentialsAntiBuild]
 commands:
@@ -37,3 +37,7 @@ commands:
     description: show skill cooldwn
     usage: /<command> [skill name] {player name}
     permission-message: You don't have <permission>    
+    
+permissions:
+  dragonskills.skill.*:
+      description: perm to execute all skills
