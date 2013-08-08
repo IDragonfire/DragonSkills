@@ -6,10 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import com.earth2me.essentials.antibuild.AntiBuildConfig;
+import com.earth2me.essentials.antibuild.IAntiBuild;
+import com.github.idragonfire.dragonskills.TerrainException;
 
 public class DUtils {
     public static final int FRONT = 0;
@@ -143,25 +149,62 @@ public class DUtils {
         return false;
     }
 
-    public static boolean transformBlock(Player player, Block block,
-            Material type) throws Exception {
+    public static boolean transformBlockWithException(Player player,
+            Block block, Material type) throws TerrainException {
         return transformBlock(player, block, type.getId(), (byte) 0);
     }
 
-    public static boolean transformBlock(Player player, Block block, int type)
-            throws Exception {
+    public static boolean transformBlockWithException(Player player,
+            Block block, int type) throws TerrainException {
+        return transformBlock(player, block, type, (byte) 0);
+    }
+
+    public static boolean transformBlockWithException(Player player,
+            Block block, int type, byte data) throws TerrainException {
+        boolean succesfull = transformBlock(player, block, type, data, true);
+        if (!succesfull) {
+            throw new TerrainException(block);
+        }
+        return true;
+    }
+
+    public static boolean transformBlock(Player player, Block block,
+            Material type) {
+        return transformBlock(player, block, type.getId(), (byte) 0);
+    }
+
+    public static boolean transformBlock(Player player, Block block, int type) {
         return transformBlock(player, block, type, (byte) 0);
     }
 
     public static boolean transformBlock(Player player, Block block, int type,
-            byte data) throws Exception {
+            byte data) {
         return transformBlock(player, block, type, data, true);
     }
 
+    public static boolean essentials = false;
+    public static IAntiBuild ess = null;
+
+    static {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(
+                "EssentialsAntiBuild");
+        if (plugin instanceof IAntiBuild) {
+            essentials = true;
+            ess = (IAntiBuild) plugin;
+        }
+    }
+
     public static boolean transformBlock(Player player, Block block, int type,
-            byte data, boolean applyPhysics) throws Exception {
+            byte data, boolean applyPhysics) {
         if (forbiddenMaterials.contains(block.getType())) {
             return false;
+        }
+        if (essentials) {
+            if (ess.checkProtectionItems(AntiBuildConfig.blacklist_break, block
+                    .getTypeId())
+                    && !player.hasPermission("essentials.protect.exemptbreak")) {
+                return false;
+            }
         }
         // if (useTowny) {
         // boolean towny_allowed = PlayerCacheUtil.getCachePermission(hero

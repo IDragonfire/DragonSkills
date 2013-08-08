@@ -104,7 +104,7 @@ public class LeaveWall extends TargetBlockSkill {
     private void transformBlock(Player player, Block block, byte leaveValue)
             throws Exception {
         if (DUtils.isAllowedGrassMaterial(block.getType())) {
-            DUtils.transformBlock(player, block, Material.GRASS.getId(),
+            DUtils.transformBlock(player, block, Material.LEAVES.getId(),
                     leaveValue);
         }
     }
