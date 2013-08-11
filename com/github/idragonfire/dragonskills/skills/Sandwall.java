@@ -2,6 +2,7 @@ package com.github.idragonfire.dragonskills.skills;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
@@ -26,8 +27,10 @@ public class Sandwall extends TargetBlockSkill {
             blocks[i] = start;
             start = start.getRelative(1, 0, 0);
         }
-        new SandwallEffect(plugin, blocks, 1, 20, false);
-        return SkillResult.SUCESSFULL;
+        SandwallEffect e = new SandwallEffect(plugin, player, blocks, 1, 20,
+                false);
+        return e.isValid() ? SkillResult.SUCESSFULL
+                : SkillResult.INVALID_TERRAIN;
     }
 
     @Override
@@ -38,9 +41,9 @@ public class Sandwall extends TargetBlockSkill {
 
     public class SandwallEffect extends PistonEffect {
 
-        public SandwallEffect(DragonSkillsPlugin plugin, Block[] targetBlocks,
-                int duration, int height, boolean sticky) {
-            super(plugin, targetBlocks, duration, height, sticky);
+        public SandwallEffect(DragonSkillsPlugin plugin, Player player,
+                Block[] targetBlocks, int duration, int height, boolean sticky) {
+            super(plugin, player, targetBlocks, duration, height, sticky);
         }
 
         @Override

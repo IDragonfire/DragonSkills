@@ -29,7 +29,8 @@ public class Earthquake extends TargetBlockSkill {
             }
         }
 
-        new EarthquakeEffect(plugin, blocks, 3, 1, true);
+        EarthquakeEffect e = new EarthquakeEffect(plugin, player, blocks, 3, 1,
+                true);
 
         // EarthquakeEffect e = new EarthquakeEffect(blocks);
         // e.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, e, 0, 1);
@@ -37,7 +38,8 @@ public class Earthquake extends TargetBlockSkill {
         // player.sendBlockChange(blocks[i].getLocation(), Material.GLASS
         // .getId(), (byte) 0);
         // }
-        return SkillResult.SUCESSFULL;
+        return e.isValid() ? SkillResult.SUCESSFULL
+                : SkillResult.INVALID_TERRAIN;
     }
 
     @Override
@@ -48,9 +50,10 @@ public class Earthquake extends TargetBlockSkill {
 
     public class EarthquakeEffect extends PistonEffect {
 
-        public EarthquakeEffect(DragonSkillsPlugin plugin,
+        public EarthquakeEffect(DragonSkillsPlugin plugin, Player player,
                 Block[] targetBlocks, int duration, int height, boolean sticky) {
-            super(plugin, targetBlocks, duration, height, sticky);
+            super(plugin, player, targetBlocks, duration, height, sticky);
+            // TODO Auto-generated constructor stub
         }
 
         @Override

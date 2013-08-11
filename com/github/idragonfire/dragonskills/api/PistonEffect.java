@@ -5,8 +5,11 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 
 import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
+import com.github.idragonfire.dragonskills.utils.DUtils;
 
 public abstract class PistonEffect implements Runnable {
     protected int taskID;
@@ -15,26 +18,39 @@ public abstract class PistonEffect implements Runnable {
     protected int duration;
     protected int height;
     protected boolean sticky;
+    protected Player player;
 
     protected Block[] powerBlocks;
     protected BlockState[] states;
     protected DragonSkillsPlugin plugin;
     protected int tickCount;
 
-    public PistonEffect(DragonSkillsPlugin plugin, Block[] targetBlocks,
-            int duration, int height, boolean sticky) {
+    protected boolean isValid;
+
+    public PistonEffect(DragonSkillsPlugin plugin, Player player,
+            Block[] targetBlocks, int duration, int height, boolean sticky) {
         this.targetBlocks = targetBlocks;
         this.duration = duration * 20;
         this.height = height;
         this.sticky = sticky;
         this.plugin = plugin;
+        this.player = player;
         init();
-        taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this,
-                0, 1);
+        if (isValid) {
+            taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,
+                    this, 1, 1);
+        }
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     protected void init() {
-        fetchStateOfBlocks();
+        isValid = fetchStateOfBlocks();
+        if (!isValid) {
+            return;
+        }
         clearMoveArea();
         clearTargets();
         placePistons();
@@ -60,35 +76,64 @@ public abstract class PistonEffect implements Runnable {
         for (int y = 0; y < height; y++) {
             for (int i = 0; i < targetBlocks.length; i++) {
                 targetBlocks[i].getRelative(0, y + 1, 0).setType(Material.AIR);
+
+                // player.sendBlockChange(
+                // targetBlocks[i].getRelative(0, y + 1, 0).getLocation(),
+                // Material.GLASS.getId(), (byte) 0);
+
             }
         }
     }
 
-    protected void fetchStateOfBlocks() {
+    protected boolean fetchStateOfBlocks() {
         // from bot to top, otherwise items, like flowers have problems
         states = new BlockState[targetBlocks.length * (height + 3)];
+        Block tmp;
         for (int i = 0; i < targetBlocks.length; i++) {
             // powerBlock
-            states[i] = targetBlocks[i].getRelative(0, -2, 0).getState();
-
+            tmp = targetBlocks[i].getRelative(0, -2, 0);
+            if (isInvalidBlock(tmp)) {
+                return false;
+            }
+            states[i] = tmp.getState();
             // piston
-            states[i + targetBlocks.length] = targetBlocks[i].getRelative(0,
-                    -1, 0).getState();
+            tmp = targetBlocks[i].getRelative(0, -1, 0);
+            if (isInvalidBlock(tmp)) {
+                return false;
+            }
+            states[i + targetBlocks.length] = tmp.getState();
 
             // target
-            states[i + targetBlocks.length * 2] = targetBlocks[i].getState();
+            tmp = targetBlocks[i];
+            if (isInvalidBlock(tmp)) {
+                return false;
+            }
+            states[i + targetBlocks.length * 2] = tmp.getState();
 
             // movearea
             for (int j = 0; j < height; j++) {
-                states[i + targetBlocks.length * (j + 3)] = targetBlocks[i]
-                        .getRelative(0, j + 1, 0).getState();
+                tmp = targetBlocks[i].getRelative(0, j + 1, 0);
+                if (isInvalidBlock(tmp)) {
+                    return false;
+                }
+                states[i + targetBlocks.length * (j + 3)] = tmp.getState();
             }
 
         }
         // for (int i = 0; i < states.length; i++) {
-        // Bukkit.getPlayer("IDragonfire").sendBlockChange(
+        // player.sendBlockChange(
         // states[i].getLocation(), Material.GLASS.getId(), (byte) 0);
         // }
+        return true;
+    }
+
+    protected boolean isInvalidBlock(Block b) {
+        if (DUtils.isForbiddenToTransform(null, b)) {
+            return false;
+        }
+        BlockBreakEvent e = new BlockBreakEvent(b, player);
+        Bukkit.getPluginManager().callEvent(e);
+        return e.isCancelled();
     }
 
     @Override
