@@ -26,6 +26,7 @@ import com.github.idragonfire.dragonskills.skills.Firewall;
 import com.github.idragonfire.dragonskills.skills.Hole;
 import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.skills.Pillar;
+import com.github.idragonfire.dragonskills.skills.Sandwall;
 import com.github.idragonfire.dragonskills.skills.Sponge;
 import com.github.idragonfire.dragonskills.skills.Wallhack;
 import com.github.idragonfire.dragonskills.skills.Waterfall;
@@ -52,6 +53,7 @@ public class Skills {
         skills.add(new Wallhack(plugin));
         skills.add(new Pillar(plugin));
         skills.add(new Earthquake(plugin));
+        skills.add(new Sandwall(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);
