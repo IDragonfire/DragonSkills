@@ -9,6 +9,7 @@ import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.api.PistonEffect;
 import com.github.idragonfire.dragonskills.api.SkillResult;
 import com.github.idragonfire.dragonskills.api.TargetBlockSkill;
+import com.github.idragonfire.dragonskills.utils.DUtils;
 
 public class Sandwall extends TargetBlockSkill {
 
@@ -21,11 +22,12 @@ public class Sandwall extends TargetBlockSkill {
 
     @Override
     public SkillResult use(Player player, Block targetBlock) {
+        BlockFace[] faces = DUtils.getDirections(player);
         Block[] blocks = new Block[width];
-        Block start = targetBlock.getRelative(width / 2 * -1, 0, 0);
+        Block start = targetBlock.getRelative(faces[DUtils.LEFT], width / 2);
         for (int i = 0; i < width; i++) {
             blocks[i] = start;
-            start = start.getRelative(1, 0, 0);
+            start = start.getRelative(faces[DUtils.RIGHT]);
         }
         SandwallEffect e = new SandwallEffect(plugin, player, blocks, 1, 20,
                 false);
@@ -35,8 +37,7 @@ public class Sandwall extends TargetBlockSkill {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
-        return null;
+        return "A spawnwall pushed from the ground";
     }
 
     public class SandwallEffect extends PistonEffect {

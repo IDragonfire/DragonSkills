@@ -266,6 +266,28 @@ public class DUtils {
         return true;
     }
 
+    public static byte getPistonData(BlockFace face) {
+        // if (face == BlockFace.DOWN) {
+        // return (byte) 0;
+        // }
+        if (face == BlockFace.NORTH) {
+            return (byte) 2;
+        }
+        if (face == BlockFace.EAST) {
+            return (byte) 5;
+        }
+        if (face == BlockFace.SOUTH) {
+            return (byte) 3;
+        }
+        if (face == BlockFace.WEST) {
+            return (byte) 4;
+        }
+        if (face == BlockFace.UP) {
+            return (byte) 1;
+        }
+        return (byte) 0;
+    }
+
     // TODO: no return Block
     public static List<Block> sphere(Block block, double radiusX,
             double radiusY, double radiusZ, boolean filled) {

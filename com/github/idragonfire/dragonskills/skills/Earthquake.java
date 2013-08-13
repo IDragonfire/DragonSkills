@@ -44,8 +44,7 @@ public class Earthquake extends TargetBlockSkill {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
-        return null;
+        return "A earthquake slow down your enemy";
     }
 
     public class EarthquakeEffect extends PistonEffect {
