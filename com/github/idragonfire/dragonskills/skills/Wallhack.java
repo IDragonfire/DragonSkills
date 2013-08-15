@@ -61,7 +61,7 @@ public class Wallhack extends TargetBlockSkill {
 
     @Override
     public String getDescription() {
-        return "Pass a wall";
+        return "Make a wall invisible and give you a look behind";
     }
 
     public class WallHackEffect extends TimeEffect {

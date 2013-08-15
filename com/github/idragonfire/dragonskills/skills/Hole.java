@@ -122,9 +122,9 @@ public class Hole extends TargetBlockSkill {
 
     public boolean invalidBlock(Player player, Block block) {
         if (!allowedMaterial.contains(block.getType())) {
-            return false;
+            return true;
         }
-        return DUtils.canBreak(player, block);
+        return !DUtils.canBreak(player, block);
     }
 
     public class HoleEffect extends TimeEffect {
