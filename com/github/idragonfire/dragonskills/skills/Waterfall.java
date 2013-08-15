@@ -1,5 +1,6 @@
 package com.github.idragonfire.dragonskills.skills;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -16,6 +17,8 @@ public class Waterfall extends TargetBlockSkill {
 
     @SkillConfig
     private int waterHeight = 3;
+    @SkillConfig
+    private int waterLifetime = 8;
 
     public Waterfall(DragonSkillsPlugin plugin) {
         super(plugin);
@@ -30,13 +33,25 @@ public class Waterfall extends TargetBlockSkill {
             DSystem.log("only allowed in the air");
             return SkillResult.FAIL;
         }
-        return DUtils.transformBlock(player, targetBlock, Material.WATER) ? SkillResult.SUCESSFULL
-                : SkillResult.FAIL;
+        final Block a = targetBlock;
+        boolean sucessfull = DUtils.transformBlock(player, targetBlock,
+                Material.WATER);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+            @Override
+            public void run() {
+                if (a.getType() == Material.WATER
+                        || a.getType() == Material.STATIONARY_WATER) {
+                    a.setType(Material.AIR);
+                }
+            }
+        }, waterLifetime * DUtils.TICKS);
+        return sucessfull ? SkillResult.SUCESSFULL : SkillResult.FAIL;
     }
 
     @Override
     public String getDescription() {
-        return DSystem.paramString("fall water");
+        return DSystem.paramString(
+                "spawn a waterfall $1 over the cursor for $2 seconds",
+                waterHeight, waterLifetime);
     }
-
 }
