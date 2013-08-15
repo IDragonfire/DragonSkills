@@ -31,8 +31,8 @@ public class Sponge extends TargetBlockSkill {
     @SkillConfig
     private int spongeLifeTime = 5;
 
-    private HashSet<Material> allowedMaterials = new HashSet<Material>(Arrays
-            .asList(new Material[] { Material.AIR, Material.WATER,
+    private HashSet<Material> allowedMaterials = new HashSet<Material>(
+            Arrays.asList(new Material[] { Material.AIR, Material.WATER,
                     Material.STATIONARY_WATER }));
 
     public Sponge(DragonSkillsPlugin plugin) {
@@ -68,7 +68,8 @@ public class Sponge extends TargetBlockSkill {
         DUtils.transformBlock(player, sponge, Material.SPONGE);
         effect.startEffect();
         for (Block block : blocks) {
-            if (block.getType() == Material.WATER) {
+            if (block.getType() == Material.WATER
+                    || block.getType() == Material.STATIONARY_WATER) {
                 try {
                     DUtils.transformBlock(player, block, Material.AIR);
                 } catch (Exception e) {
@@ -76,7 +77,6 @@ public class Sponge extends TargetBlockSkill {
                 }
             }
         }
-        DSystem.log("cast sponge");
         return SkillResult.SUCESSFULL;
     }
 
@@ -90,7 +90,8 @@ public class Sponge extends TargetBlockSkill {
 
     @Override
     public String getDescription() {
-        return DSystem.paramString("Spawn a active sponge");
+        return DSystem.paramString("Spawn a sponge for $1 seconds",
+                spongeLifeTime);
     }
 
     public class SpongeEffect extends TimeEffect implements Listener {
@@ -114,7 +115,6 @@ public class Sponge extends TargetBlockSkill {
             HandlerList.unregisterAll(this);
             // TODO: unsafe
             sponge.setType(Material.AIR);
-            DSystem.log("despawn sponge");
         }
 
         @EventHandler(ignoreCancelled = true)
@@ -133,11 +133,10 @@ public class Sponge extends TargetBlockSkill {
 
         @EventHandler(ignoreCancelled = true)
         public void onBlockBreakEvent(BlockBreakEvent event) {
-            if (blocks.contains(event.getBlock())) {
+            if (sponge.equals(event.getBlock())) {
                 event.setCancelled(true);
             }
         }
-
     }
 
 }
