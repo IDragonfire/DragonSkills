@@ -87,17 +87,28 @@ public class Pillar extends ActiveSkill {
                 }
                 redstoneStates[i + toMove.length] = tmp.getState();
             }
+
+            // store targetBlocks;
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < toMove.length; j++) {
+                    tmp = toMove[j].getRelative(0, i, 0);
+                    extractStates[j + i * toMove.length] = tmp.getState();
+                    if (!DUtils.canBreak(player, tmp)) {
+                        throw new Exception("invalid terrain");
+                    }
+                }
+            }
+
+            // transform blocks
+
             for (int i = 0; i < toMove.length; i++) {
                 tmp = toMove[i].getRelative(BlockFace.DOWN);
                 tmp.setTypeIdAndData(Material.PISTON_BASE.getId(),
                         DUtils.getPistonData(BlockFace.UP), false);
             }
-            // store targetBlocks;
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < toMove.length; j++) {
-                    extractStates[j + i * toMove.length] = toMove[j]
-                            .getRelative(0, i, 0).getState();
-                }
+
+            for (int i = 0; i < extractStates.length; i++) {
+                extractStates[i].getBlock().setType(Material.AIR);
             }
 
             // Player p = Bukkit.getPlayer("IDragonfire");
@@ -125,7 +136,6 @@ public class Pillar extends ActiveSkill {
         @Override
         protected void endEffect() {
             for (int i = 0; i < redstoneStates.length; i++) {
-                DSystem.log("restore");
                 redstoneStates[i].update(true);
             }
             RestoreTask restore = new RestoreTask(plugin, extractStates,
@@ -155,6 +165,5 @@ public class Pillar extends ActiveSkill {
                 index--;
             }
         }
-
     }
 }
