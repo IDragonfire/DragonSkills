@@ -11,7 +11,9 @@ import com.github.idragonfire.dragonskills.DragonSkillsPlugin;
 import com.github.idragonfire.dragonskills.api.DSystem;
 import com.github.idragonfire.dragonskills.api.SkillResult;
 import com.github.idragonfire.dragonskills.api.TargetBlockSkill;
+import com.github.idragonfire.dragonskills.api.TickEffect;
 import com.github.idragonfire.dragonskills.utils.DUtils;
+import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
 public class SidePush extends TargetBlockSkill {
 
@@ -20,6 +22,9 @@ public class SidePush extends TargetBlockSkill {
     private BlockFace[] facePower = new BlockFace[] { BlockFace.DOWN,
             BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
             BlockFace.WEST };
+
+    @SkillConfig
+    private int blockLifeTime = 3;
 
     public SidePush(DragonSkillsPlugin plugin) {
         super(plugin);
@@ -33,7 +38,7 @@ public class SidePush extends TargetBlockSkill {
             return SkillResult.FAIL;
         }
         new SidePushEffect(plugin, options.restore, options.pistonBlock,
-                options.side, options.powerBlock);
+                options.side, options.powerBlock, blockLifeTime).start();
         return SkillResult.SUCESSFULL;
     }
 
@@ -72,13 +77,14 @@ public class SidePush extends TargetBlockSkill {
             return null;
         }
 
-        return new SidePushOptions(side, restore[1].getBlock(), restore[0]
-                .getBlock(), restore);
+        return new SidePushOptions(side, restore[1].getBlock(),
+                restore[0].getBlock(), restore);
     }
 
     @Override
     public String getDescription() {
-        return "push a block to a side";
+        return DSystem.paramString("push a block out of a wall for $1 seconds",
+                blockLifeTime);
     }
 
     public class SidePushOptions {
@@ -97,51 +103,48 @@ public class SidePush extends TargetBlockSkill {
         }
     }
 
-    public class SidePushEffect implements Runnable {
-        private DragonSkillsPlugin plugin;
-        private int id;
-        private int tickCount = 0;
+    public class SidePushEffect extends TickEffect {
         private BlockState[] restore;
         private Block piston;
         private BlockFace side;
         private Block power;
+        private int delayInSeconds;
 
         public SidePushEffect(DragonSkillsPlugin plugin, BlockState[] restore,
-                Block piston, BlockFace side, Block power) {
-            super();
-            this.plugin = plugin;
+                Block piston, BlockFace side, Block power, int delayInSeconds) {
+            super(plugin, 0, 2, 2);
             this.restore = restore;
             this.piston = piston;
             this.side = side;
             this.power = power;
-            id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this,
-                    0, 1);
+            this.delayInSeconds = delayInSeconds;
         }
 
         @Override
-        public void run() {
-            if (tickCount > 3 * 20) {
-                DSystem.log("to slow");
-                // Bukkit.getScheduler().cancelTask(id);
-                // blocks[0].setType(Material.DIRT);
-                // blocks[2].setType(Material.DIRT);
-            }
-            if (tickCount == 3 * 20) {
-                Bukkit.getScheduler().cancelTask(id);
-                for (int i = 0; i < restore.length; i++) {
-                    restore[i].update(true);
-                }
-            }
+        protected void effectTick() {
             if (tickCount == 0) {
                 restore[3].getBlock().setType(Material.AIR);
-                piston.setTypeIdAndData(Material.PISTON_BASE.getId(), DUtils
-                        .getPistonData(side), false);
+                piston.setTypeIdAndData(Material.PISTON_BASE.getId(),
+                        DUtils.getPistonData(side), false);
                 power.setType(Material.REDSTONE_BLOCK);
             } else if (tickCount == 1) {
                 piston.setType(Material.DIRT);
                 power.setType(Material.DIRT);
             }
-            tickCount++;
+        }
+
+        @Override
+        protected void endEffect() {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
+                    new Runnable() {
+
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < restore.length; i++) {
+                                restore[i].update(true);
+                            }
+                        }
+                    }, delayInSeconds * DUtils.TICKS);
         }
     }
 

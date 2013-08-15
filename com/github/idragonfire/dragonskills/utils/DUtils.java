@@ -197,6 +197,15 @@ public class DUtils {
         }
     }
 
+    public static boolean canBreak(Player player, Block[] blocks) {
+        for (int i = 0; i < blocks.length; i++) {
+            if (!canBreak(player, blocks[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean canBreak(Player player, Block block) {
         if (forbiddenMaterials.contains(block.getType())) {
             return false;

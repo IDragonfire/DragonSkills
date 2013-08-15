@@ -85,7 +85,7 @@ public class DPlayer {
         if (!hasBind(mat)) {
             return;
         }
-        event.setCancelled(true);
+        // event.setCancelled(true);
         skills.useSkill(bindList.get(mat), this);
     }
 
@@ -105,8 +105,8 @@ public class DPlayer {
         section = player.createSection("cooldown");
         for (String skillName : cooldowns.keySet()) {
             if (cooldowns.get(skillName).compareTo(current_time) > 0) {
-                section.set(skillName, FORMAT_OUTPUT.format(cooldowns
-                        .get(skillName)));
+                section.set(skillName,
+                        FORMAT_OUTPUT.format(cooldowns.get(skillName)));
             }
         }
 
@@ -134,8 +134,8 @@ public class DPlayer {
         Set<String> keys = section.getKeys(false);
         if ((keys != null) && (keys.size() > 0)) {
             for (String materialString : keys) {
-                player.addBind(Material.valueOf(materialString), section
-                        .getString(materialString));
+                player.addBind(Material.valueOf(materialString),
+                        section.getString(materialString));
             }
         }
 
@@ -144,8 +144,8 @@ public class DPlayer {
         if ((keys != null) && (keys.size() > 0)) {
             for (String skillName : keys) {
                 try {
-                    player.addCooldown(skillName, FORMAT_OUTPUT.parse(section
-                            .getString(skillName)));
+                    player.addCooldown(skillName,
+                            FORMAT_OUTPUT.parse(section.getString(skillName)));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
