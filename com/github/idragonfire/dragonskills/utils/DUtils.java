@@ -36,7 +36,7 @@ public class DUtils {
     public static int nextInt(int max) {
         return rand.nextInt(max);
     }
-    
+
     public static float nextFloat() {
         return rand.nextFloat();
     }
@@ -369,6 +369,19 @@ public class DUtils {
             }
         }
 
+        return blocks;
+    }
+
+    public static Block[] getHCube(Block block, int width) {
+        Block[] blocks = new Block[width * width];
+        Block start = block.getRelative(-width / 2, 0, -width / 2);
+        int index = 0;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < width; j++) {
+                blocks[index] = start.getRelative(i, 0, j);
+                index++;
+            }
+        }
         return blocks;
     }
 

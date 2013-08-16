@@ -20,6 +20,7 @@ import com.github.idragonfire.dragonskills.command.CmdSkillDesc;
 import com.github.idragonfire.dragonskills.command.CmdSkills;
 import com.github.idragonfire.dragonskills.command.CmdUnbind;
 import com.github.idragonfire.dragonskills.command.CommandHandler;
+import com.google.common.base.Joiner;
 
 public class DragonSkillsPlugin extends JavaPlugin {
     private Skills skills;
@@ -83,9 +84,7 @@ public class DragonSkillsPlugin extends JavaPlugin {
 
     // TODO: check if player exists
     public void cmdSkills(CommandSender sender) {
-        for (Skill skill : skills.getSkills()) {
-            sender.sendMessage(skill.getSkillName());
-        }
+        sender.sendMessage(Joiner.on(", ").skipNulls().join(skills.getSkills()));
     }
 
     public void cmdBindSkill(String skillName, CommandSender sender,
@@ -121,8 +120,7 @@ public class DragonSkillsPlugin extends JavaPlugin {
     }
 
     public void cmdHelp(CommandSender sender) {
-        sender
-                .sendMessage("http://dev.bukkit.org/bukkit-plugins/dragonskills/");
+        sender.sendMessage("http://dev.bukkit.org/bukkit-plugins/dragonskills/");
     }
 
     public void cmdSkill(String skillName, CommandSender sender,

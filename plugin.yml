@@ -1,6 +1,6 @@
 name: DragonSkills
 author: IDragonfire
-version: 0.4
+version: 0.5
 main: com.github.idragonfire.dragonskills.DragonSkillsPlugin
 soft-depend: [EssentialsAntiBuild]
 commands:

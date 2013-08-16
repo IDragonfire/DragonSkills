@@ -26,6 +26,7 @@ import com.github.idragonfire.dragonskills.skills.Fireman;
 import com.github.idragonfire.dragonskills.skills.Firetrail;
 import com.github.idragonfire.dragonskills.skills.Firewall;
 import com.github.idragonfire.dragonskills.skills.Hole;
+import com.github.idragonfire.dragonskills.skills.Iceland;
 import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.skills.Pillar;
 import com.github.idragonfire.dragonskills.skills.Sandtrail;
@@ -34,6 +35,7 @@ import com.github.idragonfire.dragonskills.skills.SidePush;
 import com.github.idragonfire.dragonskills.skills.Sponge;
 import com.github.idragonfire.dragonskills.skills.Wallhack;
 import com.github.idragonfire.dragonskills.skills.Waterfall;
+import com.github.idragonfire.dragonskills.skills.WebTrap;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
 public class Skills {
@@ -62,6 +64,8 @@ public class Skills {
         skills.add(new Firetrail(plugin));
         skills.add(new Sandtrail(plugin));
         skills.add(new Arrowrain(plugin));
+        skills.add(new WebTrap(plugin));
+        skills.add(new Iceland(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);
@@ -109,6 +113,8 @@ public class Skills {
         ActiveSkill skill = (ActiveSkill) getSkill(skillName);
         if (skill.use(player.getBukkitPlayer()) == SkillResult.SUCESSFULL) {
             player.addCooldown(skillName, skill.getCooldown());
+        } else {
+            DSystem.log("skill failed: $1", skillName);
         }
     }
 

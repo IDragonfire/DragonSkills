@@ -18,4 +18,9 @@ public abstract class Skill {
     }
 
     public abstract String getDescription();
+
+    @Override
+    public String toString() {
+        return getSkillName();
+    }
 }
