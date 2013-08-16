@@ -19,6 +19,7 @@ import com.github.idragonfire.dragonskills.api.ActiveSkill;
 import com.github.idragonfire.dragonskills.api.DSystem;
 import com.github.idragonfire.dragonskills.api.Skill;
 import com.github.idragonfire.dragonskills.api.SkillResult;
+import com.github.idragonfire.dragonskills.skills.AirWalk;
 import com.github.idragonfire.dragonskills.skills.Arrowrain;
 import com.github.idragonfire.dragonskills.skills.DiaFinder;
 import com.github.idragonfire.dragonskills.skills.Earthquake;
@@ -34,6 +35,7 @@ import com.github.idragonfire.dragonskills.skills.Sandwall;
 import com.github.idragonfire.dragonskills.skills.SidePush;
 import com.github.idragonfire.dragonskills.skills.Sponge;
 import com.github.idragonfire.dragonskills.skills.Wallhack;
+import com.github.idragonfire.dragonskills.skills.WaterWalk;
 import com.github.idragonfire.dragonskills.skills.Waterfall;
 import com.github.idragonfire.dragonskills.skills.WebTrap;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
@@ -66,6 +68,8 @@ public class Skills {
         skills.add(new Arrowrain(plugin));
         skills.add(new WebTrap(plugin));
         skills.add(new Iceland(plugin));
+        skills.add(new WaterWalk(plugin));
+        skills.add(new AirWalk(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);
