@@ -19,6 +19,7 @@ import com.github.idragonfire.dragonskills.api.ActiveSkill;
 import com.github.idragonfire.dragonskills.api.DSystem;
 import com.github.idragonfire.dragonskills.api.Skill;
 import com.github.idragonfire.dragonskills.api.SkillResult;
+import com.github.idragonfire.dragonskills.skills.Arrowrain;
 import com.github.idragonfire.dragonskills.skills.DiaFinder;
 import com.github.idragonfire.dragonskills.skills.Earthquake;
 import com.github.idragonfire.dragonskills.skills.Fireman;
@@ -27,6 +28,7 @@ import com.github.idragonfire.dragonskills.skills.Firewall;
 import com.github.idragonfire.dragonskills.skills.Hole;
 import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.skills.Pillar;
+import com.github.idragonfire.dragonskills.skills.Sandtrail;
 import com.github.idragonfire.dragonskills.skills.Sandwall;
 import com.github.idragonfire.dragonskills.skills.SidePush;
 import com.github.idragonfire.dragonskills.skills.Sponge;
@@ -58,6 +60,8 @@ public class Skills {
         skills.add(new Sandwall(plugin));
         skills.add(new SidePush(plugin));
         skills.add(new Firetrail(plugin));
+        skills.add(new Sandtrail(plugin));
+        skills.add(new Arrowrain(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);

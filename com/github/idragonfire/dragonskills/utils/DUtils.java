@@ -36,6 +36,10 @@ public class DUtils {
     public static int nextInt(int max) {
         return rand.nextInt(max);
     }
+    
+    public static float nextFloat() {
+        return rand.nextFloat();
+    }
 
     public enum Direction {
         NORTH, EAST, SOUTH, WEST, INVALID;
