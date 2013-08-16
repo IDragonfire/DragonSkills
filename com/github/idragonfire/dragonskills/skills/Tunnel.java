@@ -23,7 +23,6 @@ public class Tunnel extends TargetBlockSkill {
 
     public Tunnel(DragonSkillsPlugin plugin) {
         super(plugin);
-        setDefaultCooldown(tunnelLifeTime);
     }
 
     @Override
@@ -67,6 +66,7 @@ public class Tunnel extends TargetBlockSkill {
             for (int i = 0; i < blocks.length; i++) {
                 states[i] = blocks[i].getState();
                 blocks[i].setType(Material.AIR);
+                DUtils.addBlock(blocks[i]);
             }
         }
 
@@ -74,6 +74,7 @@ public class Tunnel extends TargetBlockSkill {
         public void endTimeEffect() {
             for (int i = 0; i < states.length; i++) {
                 states[i].update(true);
+                DUtils.removeBlock(blocks[i]);
             }
         }
 

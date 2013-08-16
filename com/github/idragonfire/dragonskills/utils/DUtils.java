@@ -214,6 +214,9 @@ public class DUtils {
         if (forbiddenMaterials.contains(block.getType())) {
             return false;
         }
+        if (transformedBlocks.contains(block)) {
+            return false;
+        }
         BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
         Bukkit.getPluginManager().callEvent(breakEvent);
         return !breakEvent.isCancelled();
@@ -387,5 +390,15 @@ public class DUtils {
 
     private static final double lengthSq(double x, double y, double z) {
         return (x * x) + (y * y) + (z * z);
+    }
+
+    private static HashSet<Block> transformedBlocks = new HashSet<Block>();
+
+    public static void addBlock(Block b) {
+        transformedBlocks.add(b);
+    }
+
+    public static void removeBlock(Block b) {
+        transformedBlocks.remove(b);
     }
 }
