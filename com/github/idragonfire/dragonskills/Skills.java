@@ -34,6 +34,7 @@ import com.github.idragonfire.dragonskills.skills.Sandtrail;
 import com.github.idragonfire.dragonskills.skills.Sandwall;
 import com.github.idragonfire.dragonskills.skills.SidePush;
 import com.github.idragonfire.dragonskills.skills.Sponge;
+import com.github.idragonfire.dragonskills.skills.Tunnel;
 import com.github.idragonfire.dragonskills.skills.Wallhack;
 import com.github.idragonfire.dragonskills.skills.WaterWalk;
 import com.github.idragonfire.dragonskills.skills.Waterfall;
@@ -70,6 +71,7 @@ public class Skills {
         skills.add(new Iceland(plugin));
         skills.add(new WaterWalk(plugin));
         skills.add(new AirWalk(plugin));
+        skills.add(new Tunnel(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);
