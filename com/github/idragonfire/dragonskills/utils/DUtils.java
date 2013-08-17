@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -386,6 +387,16 @@ public class DUtils {
             }
         }
         return blocks;
+    }
+
+    // TODO: use more then air
+    public static boolean enoughForPlayer(Block b) {
+        return b.getType() == Material.AIR
+                && b.getRelative(BlockFace.UP).getType() == Material.AIR;
+    }
+
+    public static Location getLocationWithPlayerDelta(Block b) {
+        return b.getLocation().add(0.5, 0, 0.5);
     }
 
     private static final double lengthSq(double x, double y, double z) {

@@ -36,6 +36,9 @@ import com.github.idragonfire.dragonskills.skills.SidePush;
 import com.github.idragonfire.dragonskills.skills.Sponge;
 import com.github.idragonfire.dragonskills.skills.Tunnel;
 import com.github.idragonfire.dragonskills.skills.Wallhack;
+import com.github.idragonfire.dragonskills.skills.WarpOver;
+import com.github.idragonfire.dragonskills.skills.WarpTop;
+import com.github.idragonfire.dragonskills.skills.WarpUp;
 import com.github.idragonfire.dragonskills.skills.WaterWalk;
 import com.github.idragonfire.dragonskills.skills.Waterfall;
 import com.github.idragonfire.dragonskills.skills.WebTrap;
@@ -72,6 +75,10 @@ public class Skills {
         skills.add(new WaterWalk(plugin));
         skills.add(new AirWalk(plugin));
         skills.add(new Tunnel(plugin));
+        // skills.add(new Blackout(plugin));
+        skills.add(new WarpTop(plugin));
+        skills.add(new WarpOver(plugin));
+        skills.add(new WarpUp(plugin));
 
         for (Skill skill : skills) {
             addSkill(skill);
