@@ -5,9 +5,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -29,6 +31,14 @@ public class SortChest extends TargetBlockSkill {
 		}
 		InventoryHolder block = (InventoryHolder) targetBlock.getState();
 		Inventory inventory = block.getInventory();
+
+		// check permission
+		InventoryOpenEvent event = new InventoryOpenEvent(player.openInventory(inventory));
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			return SkillResult.INVALID_TERRAIN;
+		}
+
 		List<ItemStack> content = Arrays.asList(inventory.getContents());
 		inventory.clear();
 		Collections.sort(content, new Comparator<ItemStack>() {
