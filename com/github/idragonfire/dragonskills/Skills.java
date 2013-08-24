@@ -31,11 +31,13 @@ import com.github.idragonfire.dragonskills.skills.Iceland;
 import com.github.idragonfire.dragonskills.skills.Jump;
 import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.skills.LightWave;
+import com.github.idragonfire.dragonskills.skills.Lightning;
 import com.github.idragonfire.dragonskills.skills.Pillar;
 import com.github.idragonfire.dragonskills.skills.Rock;
 import com.github.idragonfire.dragonskills.skills.Sandtrail;
 import com.github.idragonfire.dragonskills.skills.Sandwall;
 import com.github.idragonfire.dragonskills.skills.SidePush;
+import com.github.idragonfire.dragonskills.skills.SortChest;
 import com.github.idragonfire.dragonskills.skills.Sponge;
 import com.github.idragonfire.dragonskills.skills.Tunnel;
 import com.github.idragonfire.dragonskills.skills.Wallhack;
@@ -46,6 +48,7 @@ import com.github.idragonfire.dragonskills.skills.WarpUp;
 import com.github.idragonfire.dragonskills.skills.WaterWalk;
 import com.github.idragonfire.dragonskills.skills.Waterfall;
 import com.github.idragonfire.dragonskills.skills.WebTrap;
+import com.github.idragonfire.dragonskills.skills.Woodcutting;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
 public class Skills {
@@ -87,6 +90,9 @@ public class Skills {
 		skills.add(new WarpTo(plugin));
 		skills.add(new LightWave(plugin));
 		skills.add(new Rock(plugin));
+		skills.add(new Woodcutting(plugin));
+		skills.add(new SortChest(plugin));
+		skills.add(new Lightning(plugin));
 
 		for (Skill skill : skills) {
 			addSkill(skill);
@@ -113,8 +119,7 @@ public class Skills {
 
 	public void useSkill(String skillName, DPlayer player) {
 		skillName = skillName.toLowerCase();
-		String perm = new StringBuilder("dragonskills.skill.")
-				.append(skillName).toString();
+		String perm = new StringBuilder("dragonskills.skill.").append(skillName).toString();
 		if (!player.getBukkitPlayer().hasPermission(perm)) {
 			DSystem.log("missing perm $1", perm);
 			return;
@@ -151,8 +156,8 @@ public class Skills {
 
 	// TODO: move to skills
 	public void load(Skill skill) {
-		File file = new File(skillFolder.getAbsolutePath() + File.separator
-				+ skill.getSkillName().toLowerCase() + ".yml");
+		File file = new File(skillFolder.getAbsolutePath() + File.separator + skill.getSkillName().toLowerCase()
+				+ ".yml");
 		if (!file.exists()) {
 			return;
 		}
@@ -189,8 +194,8 @@ public class Skills {
 
 	// TODO: move to skills
 	public void save(Skill skill) {
-		File file = new File(skillFolder.getAbsolutePath() + File.separator
-				+ skill.getSkillName().toLowerCase() + ".yml");
+		File file = new File(skillFolder.getAbsolutePath() + File.separator + skill.getSkillName().toLowerCase()
+				+ ".yml");
 		FileConfiguration skillConfig = new YamlConfiguration();
 
 		for (Field field : getSkillConfigFields(skill)) {
@@ -198,8 +203,7 @@ public class Skills {
 				field.setAccessible(true);
 				Object toSave = field.get(skill);
 				if (toSave instanceof Set<?>) {
-					skillConfig.set(field.getName(),
-							materialList((Set<?>) toSave));
+					skillConfig.set(field.getName(), materialList((Set<?>) toSave));
 				} else {
 					skillConfig.set(field.getName(), toSave);
 				}
