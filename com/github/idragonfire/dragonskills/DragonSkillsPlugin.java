@@ -1,5 +1,6 @@
 package com.github.idragonfire.dragonskills;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.github.idragonfire.dragonskills.command.CmdSkillDesc;
 import com.github.idragonfire.dragonskills.command.CmdSkills;
 import com.github.idragonfire.dragonskills.command.CmdUnbind;
 import com.github.idragonfire.dragonskills.command.CommandHandler;
+import com.github.idragonfire.dragonskills.utils.Metrics;
 import com.google.common.base.Joiner;
 
 public class DragonSkillsPlugin extends JavaPlugin {
@@ -43,6 +45,7 @@ public class DragonSkillsPlugin extends JavaPlugin {
 
 		Bukkit.getPluginManager().registerEvents(players, this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
+		initMetrics();
 	}
 
 	private void initCommands() {
@@ -64,6 +67,16 @@ public class DragonSkillsPlugin extends JavaPlugin {
 			effect.endTimeEffect();
 		}
 		region.save();
+	}
+
+	private void initMetrics() {
+		Metrics metrics;
+		try {
+			metrics = new Metrics(this);
+			metrics.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void addTimeEffect(TimeEffect newEffect) {
