@@ -45,6 +45,7 @@ import com.github.idragonfire.dragonskills.skills.WarpOver;
 import com.github.idragonfire.dragonskills.skills.WarpTo;
 import com.github.idragonfire.dragonskills.skills.WarpTop;
 import com.github.idragonfire.dragonskills.skills.WarpUp;
+import com.github.idragonfire.dragonskills.skills.WaterRing;
 import com.github.idragonfire.dragonskills.skills.WaterWalk;
 import com.github.idragonfire.dragonskills.skills.Waterfall;
 import com.github.idragonfire.dragonskills.skills.WebTrap;
@@ -95,6 +96,7 @@ public class Skills {
 		skills.add(new Woodcutting(plugin));
 		skills.add(new SortChest(plugin));
 		skills.add(new Lightning(plugin));
+		skills.add(new WaterRing(plugin));
 
 		for (Skill skill : skills) {
 			addSkill(skill);

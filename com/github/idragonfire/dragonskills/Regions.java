@@ -11,8 +11,6 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.idragonfire.dragonskills.api.DSystem;
-
 public class Regions {
 	private Set<String> skillFreeZones;
 	private DragonSkillsPlugin plugin;
@@ -22,7 +20,6 @@ public class Regions {
 		this.plugin = plugin;
 		skillFreeZones = new HashSet<String>();
 		file = new File(plugin.getDataFolder() + File.separator + "regions.yml");
-		DSystem.log("" + file.getAbsoluteFile());
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
