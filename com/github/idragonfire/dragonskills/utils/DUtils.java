@@ -15,10 +15,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import com.earth2me.essentials.antibuild.IAntiBuild;
 import com.github.idragonfire.dragonskills.TerrainException;
 
 public class DUtils {
@@ -131,25 +129,19 @@ public class DUtils {
 		return Direction.INVALID;
 	}
 
-	private static HashSet<Material> allowedGrassMaterials = new HashSet<Material>(
-			Arrays.asList(new Material[] { Material.AIR, Material.GRASS,
-					Material.RED_ROSE, Material.YELLOW_FLOWER, Material.SNOW,
-					Material.LONG_GRASS, Material.VINE, Material.LEAVES }));
+	private static HashSet<Material> allowedGrassMaterials = new HashSet<Material>(Arrays.asList(new Material[] {
+			Material.AIR, Material.GRASS, Material.RED_ROSE, Material.YELLOW_FLOWER, Material.SNOW,
+			Material.LONG_GRASS, Material.VINE, Material.LEAVES }));
 
 	public static boolean isAllowedGrassMaterial(Material toCheck) {
 		return allowedGrassMaterials.contains(toCheck);
 	}
 
-	private static HashSet<Material> forbiddenMaterials = new HashSet<Material>(
-			Arrays.asList(new Material[] { Material.CHEST,
-					Material.ENDER_CHEST, Material.TRAPPED_CHEST,
-					Material.DISPENSER, Material.DROPPER, Material.FURNACE,
-					Material.PISTON_BASE, Material.PISTON_STICKY_BASE,
-					Material.DIODE, Material.DAYLIGHT_DETECTOR,
-					Material.REDSTONE_COMPARATOR, Material.RAILS,
-					Material.DETECTOR_RAIL, Material.POWERED_RAIL,
-					Material.BREWING_STAND, Material.JUKEBOX,
-					Material.MOB_SPAWNER, Material.SIGN }));
+	private static HashSet<Material> forbiddenMaterials = new HashSet<Material>(Arrays.asList(new Material[] {
+			Material.CHEST, Material.ENDER_CHEST, Material.TRAPPED_CHEST, Material.DISPENSER, Material.DROPPER,
+			Material.FURNACE, Material.PISTON_BASE, Material.PISTON_STICKY_BASE, Material.DIODE,
+			Material.DAYLIGHT_DETECTOR, Material.REDSTONE_COMPARATOR, Material.RAILS, Material.DETECTOR_RAIL,
+			Material.POWERED_RAIL, Material.BREWING_STAND, Material.JUKEBOX, Material.MOB_SPAWNER, Material.SIGN }));
 
 	public static boolean isForbiddenToTransform(Player player, Block block) {
 		if (forbiddenMaterials.contains(block.getType())) {
@@ -158,18 +150,17 @@ public class DUtils {
 		return false;
 	}
 
-	public static boolean transformBlockWithException(Player player,
-			Block block, Material type) throws TerrainException {
+	public static boolean transformBlockWithException(Player player, Block block, Material type)
+			throws TerrainException {
 		return transformBlock(player, block, type.getId(), (byte) 0);
 	}
 
-	public static boolean transformBlockWithException(Player player,
-			Block block, int type) throws TerrainException {
+	public static boolean transformBlockWithException(Player player, Block block, int type) throws TerrainException {
 		return transformBlock(player, block, type, (byte) 0);
 	}
 
-	public static boolean transformBlockWithException(Player player,
-			Block block, int type, byte data) throws TerrainException {
+	public static boolean transformBlockWithException(Player player, Block block, int type, byte data)
+			throws TerrainException {
 		boolean succesfull = transformBlock(player, block, type, data, true);
 		if (!succesfull) {
 			throw new TerrainException(block);
@@ -177,8 +168,7 @@ public class DUtils {
 		return true;
 	}
 
-	public static boolean transformBlock(Player player, Block block,
-			Material type) {
+	public static boolean transformBlock(Player player, Block block, Material type) {
 		return transformBlock(player, block, type.getId(), (byte) 0);
 	}
 
@@ -186,22 +176,11 @@ public class DUtils {
 		return transformBlock(player, block, type, (byte) 0);
 	}
 
-	public static boolean transformBlock(Player player, Block block, int type,
-			byte data) {
+	public static boolean transformBlock(Player player, Block block, int type, byte data) {
 		return transformBlock(player, block, type, data, true);
 	}
 
 	public static boolean essentials = false;
-	public static IAntiBuild ess = null;
-
-	static {
-		Plugin plugin = Bukkit.getPluginManager().getPlugin(
-				"EssentialsAntiBuild");
-		if (plugin instanceof IAntiBuild) {
-			essentials = true;
-			ess = (IAntiBuild) plugin;
-		}
-	}
 
 	public static boolean canBreak(Player player, Block[] blocks) {
 		for (int i = 0; i < blocks.length; i++) {
@@ -224,8 +203,7 @@ public class DUtils {
 		return !breakEvent.isCancelled();
 	}
 
-	public static boolean transformBlock(Player player, Block block, int type,
-			byte data, boolean applyPhysics) {
+	public static boolean transformBlock(Player player, Block block, int type, byte data, boolean applyPhysics) {
 		if (forbiddenMaterials.contains(block.getType())) {
 			return false;
 		}
@@ -238,8 +216,7 @@ public class DUtils {
 
 		BlockState state = block.getState();
 		block.setTypeIdAndData(type, data, false);
-		BlockPlaceEvent placeEvent = new BlockPlaceEvent(block, state, block,
-				player.getItemInHand(), player, true);
+		BlockPlaceEvent placeEvent = new BlockPlaceEvent(block, state, block, player.getItemInHand(), player, true);
 		Bukkit.getPluginManager().callEvent(placeEvent);
 		if (placeEvent.isCancelled()) {
 			state.update(true);
@@ -306,8 +283,7 @@ public class DUtils {
 		return (byte) 0;
 	}
 
-	public static List<Block> getHCyl(Block center, double radiusX,
-			double radiusZ, int height, boolean filled) {
+	public static List<Block> getHCyl(Block center, double radiusX, double radiusZ, int height, boolean filled) {
 		List<Block> blocks = new ArrayList<Block>();
 		Vector pos = center.getLocation().toVector();
 		int affected = 0;
@@ -324,8 +300,7 @@ public class DUtils {
 
 		if (pos.getBlockY() < 0) {
 			pos = pos.setY(0);
-		} else if (pos.getBlockY() + height - 1 > center.getWorld()
-				.getMaxHeight()) {
+		} else if (pos.getBlockY() + height - 1 > center.getWorld().getMaxHeight()) {
 			height = center.getWorld().getMaxHeight() - pos.getBlockY() + 1;
 		}
 
@@ -371,8 +346,7 @@ public class DUtils {
 	}
 
 	// TODO: no return Block
-	public static List<Block> sphere(Block block, double radiusX,
-			double radiusY, double radiusZ, boolean filled) {
+	public static List<Block> sphere(Block block, double radiusX, double radiusY, double radiusZ, boolean filled) {
 		List<Block> blocks = new ArrayList<Block>();
 
 		radiusX += 0.5;
@@ -412,8 +386,7 @@ public class DUtils {
 					}
 
 					if (!filled) {
-						if (lengthSq(nextXn, yn, zn) <= 1
-								&& lengthSq(xn, nextYn, zn) <= 1
+						if (lengthSq(nextXn, yn, zn) <= 1 && lengthSq(xn, nextYn, zn) <= 1
 								&& lengthSq(xn, yn, nextZn) <= 1) {
 							continue;
 						}
@@ -449,8 +422,7 @@ public class DUtils {
 
 	// TODO: use more then air
 	public static boolean enoughForPlayer(Block b) {
-		return b.getType() == Material.AIR
-				&& b.getRelative(BlockFace.UP).getType() == Material.AIR;
+		return b.getType() == Material.AIR && b.getRelative(BlockFace.UP).getType() == Material.AIR;
 	}
 
 	public static Location getLocationWithPlayerDelta(Block b) {

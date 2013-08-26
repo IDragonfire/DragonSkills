@@ -2,38 +2,38 @@ name: DragonSkills
 author: IDragonfire
 version: 0.6
 main: com.github.idragonfire.dragonskills.DragonSkillsPlugin
-soft-depend: [EssentialsAntiBuild]
+soft-depend: [Heroes]
 commands:
   bind:
-    aliases: ['b']
+    aliases: ['b', 'dbind']
     description: bind a skill on a item (material)
     usage: /<command> [skill name]
     permission: dragonskills.bind
     permission-message: You don't have <permission>
   unbind:
-    aliases: ['u']
+    aliases: ['u', 'dunbind']
     description: unbind the current material
     usage: /<command>
     permission: dragonskills.unbind
     permission-message: You don't have <permission>
   skill:
-    aliases: ['s']
+    aliases: ['s', 'dskill']
     description: use a skill
     usage: /<command> [skill name] {player name}
     permission: dragonskills.skill
     permission-message: You don't have <permission>
   skills:
-    aliases: ['skill_list']
+    aliases: ['slist', 'dskills]
     description: show all skills
     usage: /<command>
     permission: dragonskills.skill_list
   skilldesc:
-    alias: ['skillhelp']
+    alias: ['shelp', 'dshelp']
     description: show skill description
     usage: /<command> [skill name]
     permission-message: You don't have <permission>
   cd:
-    alias: ['cooldown']
+    alias: ['cooldown', 'dcd']
     description: show skill cooldwn
     usage: /<command> [skill name] {player name}
     permission-message: You don't have <permission>    
