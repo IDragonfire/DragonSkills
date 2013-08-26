@@ -54,8 +54,10 @@ import com.github.idragonfire.dragonskills.utils.SkillConfig;
 public class Skills {
 	private HashMap<String, Skill> skillList;
 	private final File skillFolder;
+	private DragonSkillsPlugin plugin;
 
 	public Skills(DragonSkillsPlugin plugin) {
+		this.plugin = plugin;
 		skillList = new HashMap<String, Skill>();
 		skillFolder = new File(plugin.getDataFolder(), "skills_config");
 		skillFolder.mkdirs();
@@ -118,6 +120,10 @@ public class Skills {
 	}
 
 	public void useSkill(String skillName, DPlayer player) {
+		if (plugin.isInSkillFreeRegion(player.getBukkitPlayer().getLocation())) {
+			DSystem.log("skill free region");
+			return;
+		}
 		skillName = skillName.toLowerCase();
 		String perm = new StringBuilder("dragonskills.skill.").append(skillName).toString();
 		if (!player.getBukkitPlayer().hasPermission(perm)) {

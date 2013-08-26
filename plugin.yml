@@ -1,6 +1,6 @@
 name: DragonSkills
 author: IDragonfire
-version: 0.6
+version: 0.7
 main: com.github.idragonfire.dragonskills.DragonSkillsPlugin
 soft-depend: [Heroes]
 commands:
@@ -23,20 +23,35 @@ commands:
     permission: dragonskills.skill
     permission-message: You don't have <permission>
   skills:
-    aliases: ['slist', 'dskills]
+    aliases: ['slist', 'dskills']
     description: show all skills
     usage: /<command>
-    permission: dragonskills.skill_list
+    permission: dragonskills.skills
+    permission-message: You don't have <permission>
   skilldesc:
-    alias: ['shelp', 'dshelp']
+    aliases: ['shelp', 'dshelp']
     description: show skill description
     usage: /<command> [skill name]
+    permission: dragonskills.skilldesc
     permission-message: You don't have <permission>
   cd:
-    alias: ['cooldown', 'dcd']
+    aliases: ['cooldown', 'dcd']
     description: show skill cooldwn
     usage: /<command> [skill name] {player name}
-    permission-message: You don't have <permission>    
+    permission: dragonskills.cd
+    permission-message: You don't have <permission> 
+  addchunk:
+    aliases: ['daddchunk']
+    description: add a chunk to skill free region
+    usge: /<command>
+    permission: dragonskills.addchunk
+    permission-message: You don't have <permission> 
+  removechunk:
+    aliases: ['dremovechunk']
+    description: remove a chunk to skill free region
+    usge: /<command>
+    permission: dragonskills.removechunk
+    permission-message: You don't have <permission> 
     
 permissions:
   dragonskills.skill.*:
