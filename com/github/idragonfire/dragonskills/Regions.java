@@ -19,7 +19,8 @@ public class Regions {
 	public Regions(DragonSkillsPlugin plugin) {
 		this.plugin = plugin;
 		skillFreeZones = new HashSet<String>();
-		file = new File(plugin.getDataFolder() + File.separator + "regions.yml");
+		new File(plugin.getDataFolder().getAbsolutePath()).mkdirs();
+		file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "regions.yml");
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
