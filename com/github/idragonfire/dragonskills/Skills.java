@@ -33,6 +33,7 @@ import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.skills.LightWave;
 import com.github.idragonfire.dragonskills.skills.Lightning;
 import com.github.idragonfire.dragonskills.skills.Pillar;
+import com.github.idragonfire.dragonskills.skills.PvpPort;
 import com.github.idragonfire.dragonskills.skills.RandomItemSpawn;
 import com.github.idragonfire.dragonskills.skills.Rock;
 import com.github.idragonfire.dragonskills.skills.Sandtrail;
@@ -99,6 +100,7 @@ public class Skills {
 		skills.add(new Lightning(plugin));
 		skills.add(new WaterRing(plugin));
 		skills.add(new RandomItemSpawn(plugin));
+		skills.add(new PvpPort(plugin));
 
 		for (Skill skill : skills) {
 			addSkill(skill);

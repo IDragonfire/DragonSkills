@@ -1,6 +1,6 @@
 name: DragonSkills
 author: IDragonfire
-version: 0.8
+version: 0.9
 main: com.github.idragonfire.dragonskills.DragonSkillsPlugin
 soft-depend: [Heroes]
 commands:
