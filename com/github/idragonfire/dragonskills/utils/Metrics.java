@@ -84,7 +84,8 @@ public class Metrics {
 	/**
 	 * All of the custom graphs to submit to metrics
 	 */
-	private final Set<Graph> graphs = Collections.synchronizedSet(new HashSet<Graph>());
+	private final Set<Graph> graphs = Collections
+			.synchronizedSet(new HashSet<Graph>());
 
 	/**
 	 * The plugin configuration file
@@ -134,7 +135,8 @@ public class Metrics {
 
 		// Do we need to create the file?
 		if (configuration.get("guid", null) == null) {
-			configuration.options().header("http://mcstats.org").copyDefaults(true);
+			configuration.options().header("http://mcstats.org")
+					.copyDefaults(true);
 			configuration.save(configurationFile);
 		}
 
@@ -204,45 +206,53 @@ public class Metrics {
 			}
 
 			// Begin hitting the server with glorious data
-			task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+			task = plugin.getServer().getScheduler()
+					.runTaskTimerAsynchronously(plugin, new Runnable() {
 
-				private boolean firstPost = true;
+						private boolean firstPost = true;
 
-				public void run() {
-					try {
-						// This has to be synchronized or it can collide with
-						// the disable method.
-						synchronized (optOutLock) {
-							// Disable Task, if it is running and the server
-							// owner decided to opt-out
-							if (isOptOut() && task != null) {
-								task.cancel();
-								task = null;
-								// Tell all plotters to stop gathering
-								// information.
-								for (Graph graph : graphs) {
-									graph.onOptOut();
+						public void run() {
+							try {
+								// This has to be synchronized or it can collide
+								// with
+								// the disable method.
+								synchronized (optOutLock) {
+									// Disable Task, if it is running and the
+									// server
+									// owner decided to opt-out
+									if (isOptOut() && task != null) {
+										task.cancel();
+										task = null;
+										// Tell all plotters to stop gathering
+										// information.
+										for (Graph graph : graphs) {
+											graph.onOptOut();
+										}
+									}
+								}
+
+								// We use the inverse of firstPost because if it
+								// is the
+								// first time we are posting,
+								// it is not a interval ping, so it evaluates to
+								// FALSE
+								// Each time thereafter it will evaluate to
+								// TRUE, i.e
+								// PING!
+								postPlugin(!firstPost);
+
+								// After the first post we set firstPost to
+								// false
+								// Each post thereafter will be a ping
+								firstPost = false;
+							} catch (IOException e) {
+								if (debug) {
+									Bukkit.getLogger().log(Level.INFO,
+											"[Metrics] " + e.getMessage());
 								}
 							}
 						}
-
-						// We use the inverse of firstPost because if it is the
-						// first time we are posting,
-						// it is not a interval ping, so it evaluates to FALSE
-						// Each time thereafter it will evaluate to TRUE, i.e
-						// PING!
-						postPlugin(!firstPost);
-
-						// After the first post we set firstPost to false
-						// Each post thereafter will be a ping
-						firstPost = false;
-					} catch (IOException e) {
-						if (debug) {
-							Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
-						}
-					}
-				}
-			}, 0, PING_INTERVAL * 1200);
+					}, 0, PING_INTERVAL * 1200);
 
 			return true;
 		}
@@ -260,12 +270,14 @@ public class Metrics {
 				configuration.load(getConfigFile());
 			} catch (IOException ex) {
 				if (debug) {
-					Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+					Bukkit.getLogger().log(Level.INFO,
+							"[Metrics] " + ex.getMessage());
 				}
 				return true;
 			} catch (InvalidConfigurationException ex) {
 				if (debug) {
-					Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+					Bukkit.getLogger().log(Level.INFO,
+							"[Metrics] " + ex.getMessage());
 				}
 				return true;
 			}
@@ -354,7 +366,7 @@ public class Metrics {
 																	// enabled
 		String pluginVersion = description.getVersion();
 		String serverVersion = Bukkit.getVersion();
-		int playersOnline = Bukkit.getServer().getOnlinePlayers().length;
+		int playersOnline = Bukkit.getServer().getOnlinePlayers().size();
 
 		// END server software specific section -- all code below does not use
 		// any code outside of this class / Java
@@ -414,7 +426,8 @@ public class Metrics {
 					graphJson.append('{');
 
 					for (Plotter plotter : graph.getPlotters()) {
-						appendJSONPair(graphJson, plotter.getColumnName(), Integer.toString(plotter.getValue()));
+						appendJSONPair(graphJson, plotter.getColumnName(),
+								Integer.toString(plotter.getValue()));
 					}
 
 					graphJson.append('}');
@@ -438,7 +451,8 @@ public class Metrics {
 		json.append('}');
 
 		// Create the url
-		URL url = new URL(BASE_URL + String.format(REPORT_URL, urlEncode(pluginName)));
+		URL url = new URL(BASE_URL
+				+ String.format(REPORT_URL, urlEncode(pluginName)));
 
 		// Connect to the website
 		URLConnection connection;
@@ -458,15 +472,17 @@ public class Metrics {
 		connection.addRequestProperty("User-Agent", "MCStats/" + REVISION);
 		connection.addRequestProperty("Content-Type", "application/json");
 		connection.addRequestProperty("Content-Encoding", "gzip");
-		connection.addRequestProperty("Content-Length", Integer.toString(compressed.length));
+		connection.addRequestProperty("Content-Length",
+				Integer.toString(compressed.length));
 		connection.addRequestProperty("Accept", "application/json");
 		connection.addRequestProperty("Connection", "close");
 
 		connection.setDoOutput(true);
 
 		if (debug) {
-			System.out.println("[Metrics] Prepared request for " + pluginName + " uncompressed=" + uncompressed.length
-					+ " compressed=" + compressed.length);
+			System.out.println("[Metrics] Prepared request for " + pluginName
+					+ " uncompressed=" + uncompressed.length + " compressed="
+					+ compressed.length);
 		}
 
 		// Write the data
@@ -475,24 +491,28 @@ public class Metrics {
 		os.flush();
 
 		// Now read the response
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(
+				connection.getInputStream()));
 		String response = reader.readLine();
 
 		// close resources
 		os.close();
 		reader.close();
 
-		if (response == null || response.startsWith("ERR") || response.startsWith("7")) {
+		if (response == null || response.startsWith("ERR")
+				|| response.startsWith("7")) {
 			if (response == null) {
 				response = "null";
 			} else if (response.startsWith("7")) {
-				response = response.substring(response.startsWith("7,") ? 2 : 1);
+				response = response
+						.substring(response.startsWith("7,") ? 2 : 1);
 			}
 
 			throw new IOException(response);
 		} else {
 			// Is this the first update this hour?
-			if (response.equals("1") || response.contains("This is your first update this hour")) {
+			if (response.equals("1")
+					|| response.contains("This is your first update this hour")) {
 				synchronized (graphs) {
 					final Iterator<Graph> iter = graphs.iterator();
 
@@ -558,8 +578,8 @@ public class Metrics {
 	 * @param value
 	 * @throws UnsupportedEncodingException
 	 */
-	private static void appendJSONPair(StringBuilder json, String key, String value)
-			throws UnsupportedEncodingException {
+	private static void appendJSONPair(StringBuilder json, String key,
+			String value) throws UnsupportedEncodingException {
 		boolean isValueNumeric = false;
 
 		try {
@@ -638,7 +658,8 @@ public class Metrics {
 	 *            the text to encode
 	 * @return the encoded text, as UTF-8
 	 */
-	private static String urlEncode(final String text) throws UnsupportedEncodingException {
+	private static String urlEncode(final String text)
+			throws UnsupportedEncodingException {
 		return URLEncoder.encode(text, "UTF-8");
 	}
 
@@ -789,7 +810,8 @@ public class Metrics {
 			}
 
 			final Plotter plotter = (Plotter) object;
-			return plotter.name.equals(name) && plotter.getValue() == getValue();
+			return plotter.name.equals(name)
+					&& plotter.getValue() == getValue();
 		}
 	}
 }

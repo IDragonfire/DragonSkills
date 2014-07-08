@@ -33,6 +33,7 @@ import com.github.idragonfire.dragonskills.skills.LeaveWall;
 import com.github.idragonfire.dragonskills.skills.LightWave;
 import com.github.idragonfire.dragonskills.skills.Lightning;
 import com.github.idragonfire.dragonskills.skills.Pillar;
+import com.github.idragonfire.dragonskills.skills.RandomItemSpawn;
 import com.github.idragonfire.dragonskills.skills.Rock;
 import com.github.idragonfire.dragonskills.skills.Sandtrail;
 import com.github.idragonfire.dragonskills.skills.Sandwall;
@@ -97,6 +98,7 @@ public class Skills {
 		skills.add(new SortChest(plugin));
 		skills.add(new Lightning(plugin));
 		skills.add(new WaterRing(plugin));
+		skills.add(new RandomItemSpawn(plugin));
 
 		for (Skill skill : skills) {
 			addSkill(skill);
@@ -127,7 +129,8 @@ public class Skills {
 			return;
 		}
 		skillName = skillName.toLowerCase();
-		String perm = new StringBuilder("dragonskills.skill.").append(skillName).toString();
+		String perm = new StringBuilder("dragonskills.skill.")
+				.append(skillName).toString();
 		if (!player.getBukkitPlayer().hasPermission(perm)) {
 			DSystem.log("missing perm $1", perm);
 			return;
@@ -152,7 +155,7 @@ public class Skills {
 		}
 	}
 
-	public List<String> materialList(Set<?> materialList) {
+	public List<String> materialList(Iterable<?> materialList) {
 		List<String> list = new ArrayList<String>();
 		for (Object mat : materialList) {
 			if (mat instanceof Material) {
@@ -164,8 +167,8 @@ public class Skills {
 
 	// TODO: move to skills
 	public void load(Skill skill) {
-		File file = new File(skillFolder.getAbsolutePath() + File.separator + skill.getSkillName().toLowerCase()
-				+ ".yml");
+		File file = new File(skillFolder.getAbsolutePath() + File.separator
+				+ skill.getSkillName().toLowerCase() + ".yml");
 		if (!file.exists()) {
 			return;
 		}
@@ -188,6 +191,13 @@ public class Skills {
 							materials.add(Material.valueOf(materialString));
 						}
 						tmpField.set(skill, materials);
+					} else if (tmpField.get(skill) instanceof List<?>) {
+						List<String> tmpList = skillConfig.getStringList(key);
+						ArrayList<Material> materials = new ArrayList<Material>();
+						for (String materialString : tmpList) {
+							materials.add(Material.valueOf(materialString));
+						}
+						tmpField.set(skill, materials);
 					} else {
 						tmpField.set(skill, skillConfig.get(key));
 					}
@@ -202,16 +212,17 @@ public class Skills {
 
 	// TODO: move to skills
 	public void save(Skill skill) {
-		File file = new File(skillFolder.getAbsolutePath() + File.separator + skill.getSkillName().toLowerCase()
-				+ ".yml");
+		File file = new File(skillFolder.getAbsolutePath() + File.separator
+				+ skill.getSkillName().toLowerCase() + ".yml");
 		FileConfiguration skillConfig = new YamlConfiguration();
 
 		for (Field field : getSkillConfigFields(skill)) {
 			try {
 				field.setAccessible(true);
 				Object toSave = field.get(skill);
-				if (toSave instanceof Set<?>) {
-					skillConfig.set(field.getName(), materialList((Set<?>) toSave));
+				if (toSave instanceof Iterable<?>) {
+					skillConfig.set(field.getName(),
+							materialList((Iterable<?>) toSave));
 				} else {
 					skillConfig.set(field.getName(), toSave);
 				}
