@@ -2,7 +2,7 @@ name: DragonSkills
 author: IDragonfire
 version: 0.9
 main: com.github.idragonfire.dragonskills.DragonSkillsPlugin
-soft-depend: [Heroes]
+soft-depend: [Heroes, ScrollingMenuSign]
 commands:
   bind:
     aliases: ['b', 'dbind']

@@ -25,7 +25,6 @@ import com.github.idragonfire.dragonskills.command.CmdSkills;
 import com.github.idragonfire.dragonskills.command.CmdUnbind;
 import com.github.idragonfire.dragonskills.command.CommandHandler;
 import com.github.idragonfire.dragonskills.utils.Metrics;
-import com.google.common.base.Joiner;
 
 public class DragonSkillsPlugin extends JavaPlugin {
 	private Skills skills;
@@ -33,6 +32,8 @@ public class DragonSkillsPlugin extends JavaPlugin {
 	private List<TimeEffect> effects;
 	private CommandHandler cmds;
 	private Regions region;
+
+	// ScrollingMenuSign sms;
 
 	@Override
 	public void onEnable() {
@@ -44,8 +45,15 @@ public class DragonSkillsPlugin extends JavaPlugin {
 		initCommands();
 
 		Bukkit.getPluginManager().registerEvents(players, this);
-		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
+		Bukkit.getPluginManager()
+				.registerEvents(new PlayerListener(this), this);
 		initMetrics();
+
+		// test sms
+		// Plugin p = Bukkit.getPluginManager().getPlugin("ScrollingMenuSign");
+		// if (p != null && p instanceof ScrollingMenuSign) {
+		// sms = (ScrollingMenuSign) p;
+		// }
 	}
 
 	private void initCommands() {
@@ -88,7 +96,8 @@ public class DragonSkillsPlugin extends JavaPlugin {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command,
+			String label, String[] args) {
 		return cmds.onCommand(sender, command, label, args);
 	}
 
@@ -103,19 +112,54 @@ public class DragonSkillsPlugin extends JavaPlugin {
 
 	// TODO: check if player exists
 	public void cmdSkills(CommandSender sender) {
-		sender.sendMessage(Joiner.on(", ").skipNulls().join(skills.getSkills()));
+		// if (sms == null) {
+		// sender.sendMessage(Joiner.on(", ").skipNulls()
+		// .join(skills.getSkills()));
+		// return;
+		// }
+		// SMSMenu menu = sms.getHandler().createMenu("Skills", "&1My Title",
+		// sender.getName());
+		// for (Skill s : skills.getSkills()) {
+		// menu.addItem(s.getSkillName(), "/skill " + s.getSkillName(),
+		// s.getSkillName());
+		// }
+		// menu.setAutosave(true);
+		// menu.setAutosort(true);
+		// SMSMapView view = null;
+		// short id = Bukkit.getServer()
+		// .createMap((World) Bukkit.getWorlds().get(0)).getId();
+		// view = new SMSMapView("SKills view", menu);
+		// view.register();
+		// view.setMapId(id);
+		// view.update(menu, SMSMenuAction.REPAINT);
+		// view.setAutosave(true);
+		// view.clearPlayerForView((Player) sender);
+		Player player = (Player) sender;
+		int slot = player.getInventory().first(Material.MAP);
+		if (slot == -1) {
+			sender.sendMessage("nooo");
+			return;
+		}
+		// ItemStack map = player.getInventory().getItem(slot);
+		// SMSMapView view = (SMSMapView) sms.getHandler().getViewManager()
+		// .getView("SKills view");
+		// map.setDurability(view.getMapView().getId());
 	}
 
-	public void cmdBindSkill(String skillName, CommandSender sender, String playername) {
+	public void cmdBindSkill(String skillName, CommandSender sender,
+			String playername) {
 		if (invalidSkill(skillName, sender)) {
 			return;
 		}
 		Player player = Bukkit.getPlayer(playername);
-		players.getDPlayer(player).addBind(player.getItemInHand().getType(), skillName);
-		sender.sendMessage(skillName + " bind to " + player.getItemInHand().getType());
+		players.getDPlayer(player).addBind(player.getItemInHand().getType(),
+				skillName);
+		sender.sendMessage(skillName + " bind to "
+				+ player.getItemInHand().getType());
 	}
 
-	public void cmdUnbindMaterial(Material material, CommandSender sender, String playername) {
+	public void cmdUnbindMaterial(Material material, CommandSender sender,
+			String playername) {
 		Player player = Bukkit.getPlayer(playername);
 		players.getDPlayer(player).removeBind(material);
 		sender.sendMessage("unbind " + player.getItemInHand().getType());
@@ -138,7 +182,8 @@ public class DragonSkillsPlugin extends JavaPlugin {
 		sender.sendMessage("http://dev.bukkit.org/bukkit-plugins/dragonskills/");
 	}
 
-	public void cmdSkill(String skillName, CommandSender sender, String playername) {
+	public void cmdSkill(String skillName, CommandSender sender,
+			String playername) {
 		if (invalidSkill(skillName, sender)) {
 			return;
 		}
