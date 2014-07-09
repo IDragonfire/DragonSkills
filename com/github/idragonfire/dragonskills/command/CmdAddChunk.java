@@ -12,7 +12,8 @@ public class CmdAddChunk extends PlayerCommand {
 	}
 
 	@Override
-	public void onPlayerCommand(Player sender, Command command, String cmd, String label, String[] args) {
+	public void onPlayerCommand(Player sender, Command command, String cmd,
+			String label, String[] args) {
 		plugin.addChunk(sender.getLocation().getChunk(), sender);
 	}
 }

@@ -150,10 +150,11 @@ public class Skills {
 			return;
 		}
 		ActiveSkill skill = (ActiveSkill) getSkill(skillName);
-		if (skill.use(player.getBukkitPlayer()) == SkillResult.SUCESSFULL) {
+		SkillResult result = skill.use(player.getBukkitPlayer());
+		if (result == SkillResult.SUCESSFULL) {
 			player.addCooldown(skillName, skill.getCooldown());
 		} else {
-			DSystem.log("skill failed: $1", skillName);
+			DSystem.log("skill failed $1: $2", result, skillName);
 		}
 	}
 

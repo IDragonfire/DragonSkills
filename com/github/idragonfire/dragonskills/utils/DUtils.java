@@ -211,7 +211,8 @@ public class DUtils {
 		}
 		BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
 		Bukkit.getPluginManager().callEvent(breakEvent);
-		return !breakEvent.isCancelled();
+		boolean cancled = breakEvent.isCancelled();
+		return !cancled;
 	}
 
 	public static boolean transformBlock(Player player, Block block, int type,
