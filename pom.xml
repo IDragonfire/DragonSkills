@@ -17,7 +17,7 @@
 		<!-- Resources -->
 		<resources>
 			<resource>
-				<directory>src</directory>
+				<directory>.</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
