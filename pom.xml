@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.idragonfire.dragonskills</groupId>
+	<artifactId>DragonSkills</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>DragonSkills</name>
+	<url>https://github.com/IDragonfire/DragonSkills</url>
+	<description>http://dev.bukkit.org/bukkit-plugins/dragonskills/</description>
+
+	<!-- Build settings -->
+	<build>
+		<finalName>${project.name}</finalName>
+		<sourceDirectory>src</sourceDirectory>
+
+		<!-- Resources -->
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+				<includes>
+					<include>*.yml</include>
+				</includes>
+			</resource>
+		</resources>
+		<!-- Plugins -->
+		<plugins>
+			<!-- Compiler -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy file="${project.build.directory}\${project.name}.jar"
+									tofile="D:\mc\latest\plugins\${project.name}.jar" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Repositories -->
+	<repositories>
+		<repository>
+			<id>bukkit-repo</id>
+			<url>http://repo.bukkit.org/content/groups/public</url>
+		</repository>
+	</repositories>
+	<!-- Dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>LATEST</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<issueManagement>
+		<system>git</system>
+		<url>https://github.com/IDragonfire/DragonSkills/issues</url>
+	</issueManagement>
+</project>
