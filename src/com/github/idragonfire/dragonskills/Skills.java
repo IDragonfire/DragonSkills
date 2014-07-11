@@ -19,39 +19,6 @@ import com.github.idragonfire.dragonskills.api.ActiveSkill;
 import com.github.idragonfire.dragonskills.api.DSystem;
 import com.github.idragonfire.dragonskills.api.Skill;
 import com.github.idragonfire.dragonskills.api.SkillResult;
-import com.github.idragonfire.dragonskills.skills.AirWalk;
-import com.github.idragonfire.dragonskills.skills.Arrowrain;
-import com.github.idragonfire.dragonskills.skills.DiaFinder;
-import com.github.idragonfire.dragonskills.skills.Earthquake;
-import com.github.idragonfire.dragonskills.skills.Fireman;
-import com.github.idragonfire.dragonskills.skills.Firetrail;
-import com.github.idragonfire.dragonskills.skills.Firewall;
-import com.github.idragonfire.dragonskills.skills.Hole;
-import com.github.idragonfire.dragonskills.skills.Iceland;
-import com.github.idragonfire.dragonskills.skills.Jump;
-import com.github.idragonfire.dragonskills.skills.LeaveWall;
-import com.github.idragonfire.dragonskills.skills.LightWave;
-import com.github.idragonfire.dragonskills.skills.Lightning;
-import com.github.idragonfire.dragonskills.skills.Pillar;
-import com.github.idragonfire.dragonskills.skills.PvpPort;
-import com.github.idragonfire.dragonskills.skills.RandomItemSpawn;
-import com.github.idragonfire.dragonskills.skills.Rock;
-import com.github.idragonfire.dragonskills.skills.Sandtrail;
-import com.github.idragonfire.dragonskills.skills.Sandwall;
-import com.github.idragonfire.dragonskills.skills.SidePush;
-import com.github.idragonfire.dragonskills.skills.SortChest;
-import com.github.idragonfire.dragonskills.skills.Sponge;
-import com.github.idragonfire.dragonskills.skills.Tunnel;
-import com.github.idragonfire.dragonskills.skills.Wallhack;
-import com.github.idragonfire.dragonskills.skills.WarpOver;
-import com.github.idragonfire.dragonskills.skills.WarpTo;
-import com.github.idragonfire.dragonskills.skills.WarpTop;
-import com.github.idragonfire.dragonskills.skills.WarpUp;
-import com.github.idragonfire.dragonskills.skills.WaterRing;
-import com.github.idragonfire.dragonskills.skills.WaterWalk;
-import com.github.idragonfire.dragonskills.skills.Waterfall;
-import com.github.idragonfire.dragonskills.skills.WebTrap;
-import com.github.idragonfire.dragonskills.skills.Woodcutting;
 import com.github.idragonfire.dragonskills.utils.SkillConfig;
 
 public class Skills {
@@ -64,49 +31,6 @@ public class Skills {
 		skillList = new HashMap<String, Skill>();
 		skillFolder = new File(plugin.getDataFolder(), "skills_config");
 		skillFolder.mkdirs();
-
-		List<Skill> skills = new ArrayList<Skill>();
-
-		skills.add(new DiaFinder(plugin));
-		skills.add(new Hole(plugin));
-		skills.add(new LeaveWall(plugin));
-		skills.add(new Firewall(plugin));
-		skills.add(new Fireman(plugin));
-		skills.add(new Sponge(plugin));
-		skills.add(new Waterfall(plugin));
-		skills.add(new Wallhack(plugin));
-		skills.add(new Pillar(plugin));
-		skills.add(new Earthquake(plugin));
-		skills.add(new Sandwall(plugin));
-		skills.add(new SidePush(plugin));
-		skills.add(new Firetrail(plugin));
-		skills.add(new Sandtrail(plugin));
-		skills.add(new Arrowrain(plugin));
-		skills.add(new WebTrap(plugin));
-		skills.add(new Iceland(plugin));
-		skills.add(new WaterWalk(plugin));
-		skills.add(new AirWalk(plugin));
-		skills.add(new Tunnel(plugin));
-		// skills.add(new Blackout(plugin));
-		skills.add(new WarpTop(plugin));
-		skills.add(new WarpOver(plugin));
-		skills.add(new WarpUp(plugin));
-		skills.add(new Jump(plugin));
-		skills.add(new WarpTo(plugin));
-		skills.add(new LightWave(plugin));
-		skills.add(new Rock(plugin));
-		skills.add(new Woodcutting(plugin));
-		skills.add(new SortChest(plugin));
-		skills.add(new Lightning(plugin));
-		skills.add(new WaterRing(plugin));
-		skills.add(new RandomItemSpawn(plugin));
-		skills.add(new PvpPort(plugin));
-
-		for (Skill skill : skills) {
-			addSkill(skill);
-			load(skill);
-			save(skill);
-		}
 	}
 
 	public List<Skill> getSkills() {
@@ -123,6 +47,9 @@ public class Skills {
 
 	public void addSkill(Skill skill) {
 		skillList.put(skill.getSkillName().toLowerCase(), skill);
+		// TODO: needed move?
+		load(skill);
+		save(skill);
 	}
 
 	public void useSkill(String skillName, DPlayer player) {
