@@ -1,0 +1,42 @@
+<project name="DragonSkills" default="build" basedir=".">
+	<property name="dir.bin" value="target/classes" />
+	<property name="dir.dist" value="build" />
+	<property name="dir.bin.skills" value="com/github/idragonfire/dragonskills/skills" />
+	<property name="dir.dist.skills" value="skills/" />
+
+	<property name="classpath" value="lib" />
+
+	<!-- Classpath for the project -->
+	<path id="master-classpath">
+		<fileset dir="${classpath}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+
+	<target name="build">
+		<foreach target="jar-skill" param="files">
+			<fileset dir="${dir.bin}/${dir.bin.skills}" includes="*.class" excludes="*$*.class" />
+		</foreach>
+		<delete file="${dir.bin}/skill.info" />
+		<copy todir="D:\mc\latest\plugins\DragonSkills\skills">
+		        <fileset dir="build/skills">
+		            <exclude name="*/*.jar" />
+		        </fileset>
+		</copy>
+		<delete dir="${dir.dist}"/>
+	</target>
+
+	<target name="jar-skill">
+		<basename file="${files}" suffix=".class" property="basename" />
+		<echo message="${basename}" />
+		<echo file="${dir.bin}/skill.info" message="main-class: com.github.idragonfire.dragonskills.skills.${basename}" />
+		<jar jarfile="${dir.dist}/${dir.dist.skills}/${basename}.jar" basedir="${dir.bin}" includes="${dir.bin.skills}/${basename}*.class skill.info">
+		</jar>
+	</target>	
+</project>
