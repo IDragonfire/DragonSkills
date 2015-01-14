@@ -25,6 +25,8 @@ import com.github.idragonfire.dragonskills.command.CmdSkills;
 import com.github.idragonfire.dragonskills.command.CmdUnbind;
 import com.github.idragonfire.dragonskills.command.CommandHandler;
 import com.github.idragonfire.dragonskills.utils.Metrics;
+import com.github.idragonfire.dragonskills.utils.SkillLoader;
+import com.google.common.base.Joiner;
 
 public class DragonSkillsPlugin extends JavaPlugin {
 	private Skills skills;
@@ -48,6 +50,7 @@ public class DragonSkillsPlugin extends JavaPlugin {
 		Bukkit.getPluginManager()
 				.registerEvents(new PlayerListener(this), this);
 		initMetrics();
+		new SkillLoader(this);
 
 		// test sms
 		// Plugin p = Bukkit.getPluginManager().getPlugin("ScrollingMenuSign");
@@ -113,9 +116,8 @@ public class DragonSkillsPlugin extends JavaPlugin {
 	// TODO: check if player exists
 	public void cmdSkills(CommandSender sender) {
 		// if (sms == null) {
-		// sender.sendMessage(Joiner.on(", ").skipNulls()
-		// .join(skills.getSkills()));
-		// return;
+		sender.sendMessage(Joiner.on(", ").skipNulls().join(skills.getSkills()));
+		return;
 		// }
 		// SMSMenu menu = sms.getHandler().createMenu("Skills", "&1My Title",
 		// sender.getName());
@@ -134,12 +136,12 @@ public class DragonSkillsPlugin extends JavaPlugin {
 		// view.update(menu, SMSMenuAction.REPAINT);
 		// view.setAutosave(true);
 		// view.clearPlayerForView((Player) sender);
-		Player player = (Player) sender;
-		int slot = player.getInventory().first(Material.MAP);
-		if (slot == -1) {
-			sender.sendMessage("nooo");
-			return;
-		}
+		// Player player = (Player) sender;
+		// int slot = player.getInventory().first(Material.MAP);
+		// if (slot == -1) {
+		// sender.sendMessage("nooo");
+		// return;
+		// }
 		// ItemStack map = player.getInventory().getItem(slot);
 		// SMSMapView view = (SMSMapView) sms.getHandler().getViewManager()
 		// .getView("SKills view");

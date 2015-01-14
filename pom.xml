@@ -38,8 +38,9 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.4</version>
+				<version>1.6</version>
 				<executions>
 					<execution>
 						<id>copy</id>
@@ -48,10 +49,22 @@
 							<goal>run</goal>
 						</goals>
 						<configuration>
-							<tasks>
+							<target>
 								<copy file="${project.build.directory}\${project.name}.jar"
 									tofile="D:\mc\latest\plugins\${project.name}.jar" />
-							</tasks>
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>jar-skills</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<ant antfile="build.xml" target="build" />
+							</target>
 						</configuration>
 					</execution>
 				</executions>
